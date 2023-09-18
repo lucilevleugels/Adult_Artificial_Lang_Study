@@ -8,17 +8,17 @@ This script has been designed to conduct an adult language systematicity study u
 
 Structure: 
 
-    Setup: A window is initiated with a white background. Trials are loaded from CSV files detailing the stimuli and expected responses. 
+Setup: A window is initiated with a white background. Trials are loaded from CSV files detailing the stimuli and expected responses. 
 
-    Condition Selection: Before beginning the experiment, the user selects between two conditions: "Condition 1" and "Condition 2". This choice determines the set of stimuli to be used. 
+Condition Selection: Before beginning the experiment, the user selects between two conditions: "Condition 1" and "Condition 2". This choice determines the set of stimuli to be used. 
     
-    Main Experiment: The study is divided into iterations of training and testing phases, which will repeat four times. Before each phase, a label ("Training Phase" or "Testing Phase") is displayed to cue the participant. 
+Main Experiment: The study is divided into iterations of training and testing phases, which will repeat four times. Before each phase, a label ("Training Phase" or "Testing Phase") is displayed to cue the participant. 
         
-        Training Phase: The participant listens to an audio stimulus while being presented with a set of images. After the audio plays, the user presses the spacebar to progress to the next trial. 
+Training Phase: The participant listens to an audio stimulus while being presented with a set of images. After the audio plays, the user presses the spacebar to progress to the next trial. 
         
-        Testing Phase: The participant listens to an audio stimulus and then selects an image (either on the left or right) that they believe corresponds to the audio. Their choice (left or right) is recorded, along with the time it took them to make that choice. Pressing the 'escape' key at any point during this phase will terminate the experiment. 
+Testing Phase: The participant listens to an audio stimulus and then selects an image (either on the left or right) that they believe corresponds to the audio. Their choice (left or right) is recorded, along with the time it took them to make that choice. Pressing the 'escape' key at any point during this phase will terminate the experiment. 
         
-    Data Saving: At the end of each testing phase, the participant's responses and reaction times are saved back to the CSV.
+Data Saving: At the end of each testing phase, the participant's responses and reaction times are saved back to the CSV.
 
 Audio: wav files produced from natural reader.
 

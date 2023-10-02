@@ -3,6 +3,9 @@ from psychopy import visual, core, sound, event, gui, data
 import os, csv
 
 win = visual.Window([800, 600], monitor="testMonitor", units="deg", color=(1, 1, 1))
+#SCN_W, SCN_H = (1280, 800)
+## Open a PsyhocPy window with the "allowStencil" option 
+#win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix', allowStencil=True, color=(1,1,1))
 
 mouse = event.Mouse(win=win)
 condition_selected = None
@@ -24,8 +27,8 @@ if choice_data[0] == "Condition 1":
 else:
     condition_selected = 4
 
-training_phase_text = visual.TextStim(win, text="Training Phase", height=0.5, color=(-1, -1, -1))
-testing_phase_text = visual.TextStim(win, text="Testing Phase", height=0.5, color=(-1, -1, -1))
+training_phase_text = visual.TextStim(win, text="Training Phase", height=1.1, color=(-1, -1, -1))
+testing_phase_text = visual.TextStim(win, text="Testing Phase", height=1.1, color=(-1, -1, -1))
 
 for iteration in range(4):
 

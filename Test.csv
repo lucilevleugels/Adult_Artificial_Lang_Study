@@ -1,0 +1,17 @@
+,block,trial,Target_image,Foil_image,Target_audio_cond1,Target_audio_cond2 ,Target_Location,Response Time,Answer,Accuracy
+0,1,1,"['Picture1.png', ' Picture2.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti zu bi bo bi,ga,right,0.562087749975035,left,0
+1,1,2,"['Picture1.png', ' Picture1.png']","['Picture1.png', ' Picture2.png']",ti bo ti,ta ,left,0.060533625015523285,left,1
+2,1,3,"['Picture1.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti bo bi,bla ,left,0.07505558300181292,left,1
+3,1,4,"['Picture1.png', ' Picture2.png', ' Picture1.png']","['Picture1.png', ' Picture1.png']",ti zu bi bo ti,za,right,0.023835500003769994,left,0
+4,2,1,"['Picture1.png', ' Picture2.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti zu bi bo bi,ga,right,0.20697445899713784,left,0
+5,2,2,"['Picture1.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti bo bi,bla ,left,0.04811916599282995,left,1
+6,2,3,"['Picture1.png', ' Picture1.png']","['Picture1.png', ' Picture2.png']",ti bo ti,ta ,left,0.07447016699006781,left,1
+7,2,4,"['Picture1.png', ' Picture2.png', ' Picture1.png']","['Picture1.png', ' Picture1.png']",ti zu bi bo ti,za,right,0.12624825001694262,left,0
+8,3,1,"['Picture1.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti bo bi,bla ,left,0.029573250008979812,right,0
+9,3,2,"['Picture1.png', ' Picture2.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti zu bi bo bi,ga,right,0.08210195801802911,right,1
+10,3,3,"['Picture1.png', ' Picture2.png', ' Picture1.png']","['Picture1.png', ' Picture1.png']",ti zu bi bo ti,za,right,0.022009499982232228,right,1
+11,3,4,"['Picture1.png', ' Picture1.png']","['Picture1.png', ' Picture2.png']",ti bo ti,ta ,left,0.05467795900767669,right,0
+12,4,1,"['Picture1.png', ' Picture2.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti zu bi bo bi,ga,right,0.02904850000049919,right,1
+13,4,2,"['Picture1.png', ' Picture2.png', ' Picture1.png']","['Picture1.png', ' Picture1.png']",ti zu bi bo ti,za,right,0.026651332998881117,right,1
+14,4,3,"['Picture1.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti bo bi,bla ,left,0.054266582999844104,right,0
+15,4,4,"['Picture1.png', ' Picture1.png']","['Picture1.png', ' Picture2.png']",ti bo ti,ta ,left,0.042329166986746714,right,0

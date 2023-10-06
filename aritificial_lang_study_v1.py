@@ -2,40 +2,25 @@ from psychopy import visual, core, sound, event, gui, data
 import os, csv
 import pandas as pd 
 
-SCN_W, SCN_H = (1280, 800)
-# Open a PsyhocPy window with the "allowStencil" option 
-win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix', allowStencil=True, color=(1,1,1))
 
-#win = visual.Window(units='norm', fullscr=True, color='white', monitor='testMonitor') 
-
-# 2. Condition Selection
+# 1 . Condition Selection
 choice_dialog = gui.Dlg(title="Select a Condition")
 choice_dialog.addField("Condition:", choices=["Condition 1", "Condition 2"])
 choice_data = choice_dialog.show()
 
 
+SCN_W, SCN_H = (1280, 800)
+# Open a PsyhocPy window with the "allowStencil" option 
+win = visual.Window(fullscr=True, units='pix', allowStencil=True, color=(1,1,1))
 
-# Load trial information from CSV
-#trial_info = []
-#with open('Trial_Info/Training_Trails_Adult_Lang_Study.csv', 'r') as csvfile:
-#    csvreader = csv.reader(csvfile)
-#    next(csvreader)  # skip header
-#    for row in csvreader:
-#        trial_info.append(row)
-#        
-#        
-#    print(trial_info)
-#    
 
 train_df = pd.read_csv('Trial_Info/Training_Trails_Adult_Lang_Study.csv')
 test_df = pd.read_csv('Trial_Info/Testing_Trials_Adult_Lang_Study.csv')
 
 
- 
 
-
-training_phase_text = visual.TextStim(win, text="Training Phase", height=20, color=(-1, -1, -1))
-testing_phase_text = visual.TextStim(win, text="Testing Phase", height=20, color=(-1, -1, -1))
+training_phase_text = visual.TextStim(win, text="Training Phase", height=20, color=(-1, -1, -1), pos=(0,0))
+testing_phase_text = visual.TextStim(win, text="Testing Phase", height=20 , color=(-1, -1, -1), pos=(0,0))
 
 #BLOCK DICTIONARY
 
@@ -91,7 +76,7 @@ for iteration in range(4):
             for image_name, i in zip(images, range(num_images)):
                 image_path = os.path.join('Images', image_name.strip())
                 x = start_x + i * spacing
-                image_stim = visual.ImageStim(win, image=image_path, pos=(x, 0))
+                image_stim = visual.ImageStim(win, image=image_path, pos=(x, 0), size=(61, 61))
                 image_stims.append(image_stim)
             
             
@@ -158,28 +143,57 @@ for iteration in range(4):
 
             # Create image stimuli for target and foil images
             if target_location == 'left':
-                target_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip())) for img in target_images]
-                foil_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip())) for img in foil_images]
+                target_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip()), size=(61, 61)) for img in target_images]
+                foil_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip()), size=(61, 61)) for img in foil_images]
             else:
-                target_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip())) for img in target_images]
-                foil_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip())) for img in foil_images]
+                target_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip()), size=(61, 61)) for img in target_images]
+                foil_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip()), size=(61, 61)) for img in foil_images]
                 
                 target_stimuli, foil_stimuli = foil_stimuli, target_stimuli
                 
-              
+#                
+#            # Calculate the positions for target and foil stimuli
+#            y_position = 0  # Adjust as needed
+#            
+#            # Calculate the total width of the target and foil stimuli based on the window size
+#            total_target_width = len(target_stimuli) * 70  # Adjust the horizontal spacing as needed
+#            total_foil_width = len(foil_stimuli) * 70  # Adjust the horizontal spacing as needed
+#
+#
+#            # Calculate the total width of the target and foil stimuli based on the window size
+#            win_width = 1280
+#            # Calculate the starting positions to center the stimuli based on the window size
+#            x_start_target = -(total_target_width + total_foil_width) / 2 + win_width / 2
+#
+#            # Set horizontal positions for target stimuli
+#            for i, target in enumerate(target_stimuli):
+#                target_x = x_start_target + (i * 70)  # Adjust the horizontal spacing as needed
+#                target.pos = (target_x, y_position)
+#
+#            # Set horizontal positions for foil stimuli
+#            for i, foil in enumerate(foil_stimuli):
+#                foil_x = x_start_target + (total_target_width / 2) + (i * 70)  # Adjust the horizontal spacing as needed
+#                foil.pos = (foil_x, y_position)
+#
+#            # Display all target stimuli and foil stimuli
+#            for target in target_stimuli:
+#                target.draw()
+#            for foil in foil_stimuli:
+#                foil.draw()
+
 
             # Calculate the positions for target and foil stimuli
             y_position = 0  # Adjust as needed
 
             # Set horizontal positions for target stimuli on the left
-            x_offset_target = -150  # Adjust as needed
+            x_offset_target = -300  # Adjust as needed
             spacing_target = 70  # Adjust the horizontal spacing as needed
             for i, target in enumerate(target_stimuli):
                 target_x = x_offset_target + (i * spacing_target)
                 target.pos = (target_x, y_position)
 
             # Set horizontal positions for foil stimuli on the right
-            x_offset_foil = 150  # Adjust as needed
+            x_offset_foil = 200  # Adjust as needed
             spacing_foil = 70  # Adjust the horizontal spacing as needed
             for i, foil in enumerate(foil_stimuli):
                 foil_x = x_offset_foil + (i * spacing_foil)
@@ -200,17 +214,20 @@ for iteration in range(4):
             start_time = core.getTime()
             keys = event.waitKeys(keyList=['left', 'right', 'escape'])
             elapsed_time = core.getTime() - start_time
-            #trial[headers.index('Response_Time')] = elapsed_time
+            block_data['Response Time'] = elapsed_time
 
             answer = 'left' if 'left' in keys else 'right'
             block_data['Answer'] = answer
             block_data['Accuracy'] = 1 if answer == target_location else 0
+            
+            BLOCK_DATA_TEST.append(block_data)
 
+            
             if 'escape' in keys:
                 break
                 
                 
-            BLOCK_DATA_TEST.append(block_data)
+            
             
         
                     

@@ -5,6 +5,10 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
+# Set seed for reproducibility 
+# REMOVE SEED FOR CHANGES IN THE STIMULI
+random.seed(123)
+
 
 def generate_transposition_foil(items,):
     
@@ -19,8 +23,7 @@ def generate_transposition_foil(items,):
     trans_foils = [[foil] for foil in cyclic_permutations[1:]]
     return trans_foils
 
-# Set seed for reproducibility
-random.seed(123)
+
 
 # Define the pool of syllabus items
 syllabus_pool = ["barget", "bimdah", "chelad", "dingep", "fisslin", "goorshell",

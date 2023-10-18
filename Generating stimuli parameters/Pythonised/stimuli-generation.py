@@ -66,8 +66,14 @@ df['final'] = df['item1'] + " " + df['casemarker1'] + " " + df['item2'] + " " + 
 
 # Create a new DataFrame with swapped case markers
 df_new = df.copy()
-swap_rows = random.sample(range(len(df)), int(len(df) * 0.5))  # Identify 50% of rows to swap
-df_new.loc[swap_rows, ['casemarker2', 'casemarker3']] = df_new.loc[swap_rows, ['casemarker3', 'casemarker2']]
+# Identify 50% of rows to swap in df_new
+swap_rows = random.sample(range(len(df_new)), int(len(df_new) * 0.5))
+
+# Swap casemarkers in df_new for the identified rows
+for row in swap_rows:
+    df_new.at[row, 'casemarker2'], df_new.at[row, 'casemarker3'] = df_new.at[row, 'casemarker3'], df_new.at[row, 'casemarker2']
+
+# Update the 'final' column in df_new
 df_new['final'] = df_new['item1'] + " " + df_new['casemarker1'] + " " + df_new['item2'] + " " + df_new['casemarker2'] + " " + df_new['item3'] + " " + df_new['casemarker3']
 
 # Label the conditions

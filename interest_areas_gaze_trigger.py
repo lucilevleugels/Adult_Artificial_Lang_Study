@@ -1,7 +1,51 @@
 import pylink
-from psychopy import visual, core, event, monitors
+from psychopy import visual, core, sound, event, gui, data, monitors
+import pandas as pd 
+import os 
 from EyeLinkCoreGraphicsPsychoPy import EyeLinkCoreGraphicsPsychoPy
 from math import hypot
+
+
+def interest_areas(win, tk):
+    # Load the cube image
+    cube_image = visual.ImageStim(win, image='cube.png', size=(61, 61))
+
+    # Define positions for the cube image
+    positions = {
+        'left': (-400, 0),
+        'right': (400, 0),
+        'top': (0, 300),
+        'center': (0, -300),
+    }
+
+    # Initialize the position index
+    position_index = 0
+
+    escape_key = 'escape'
+    space_key = 'space'
+    escape_pressed = False
+
+    tk.sendMessage('!V IMGLOAD FILL ./cube.png')
+    while position_index < len(positions):
+        position_name = list(positions.keys())[position_index]
+        
+        tk.sendMessage(f'image_onset - {position_name}')
+        position = list(positions.values())[position_index]
+        cube_image.pos = position
+        cube_image.draw()
+        win.flip()
+
+        # Wait for the Spacebar key press to move to the next position
+        keys = event.waitKeys(keyList=[space_key, escape_key])
+        if space_key in keys:
+            position_index += 1
+        elif escape_key in keys:
+            escape_pressed = True
+            break
+    
+
+
+
 # Connect to the tracker
 tk = pylink.EyeLink('100.1.1.1')
 # Open an EDF data file on the Host PC
@@ -14,9 +58,10 @@ tk.setOfflineMode()
 event_flags = 'LEFT,RIGHT,FIXATION,FIXUPDATE,SACCADE,BLINK,BUTTON,INPUT'
 tk.sendCommand(f'link_event_filter = {event_flags}')
 # Screen resolution
-SCN_W, SCN_H = (1280, 800)
+SCN_W, SCN_H = (2280, 1580)
 # Open a PsyhocPy window
 win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix')
+
 
 # Pass the display pixel coordinates (left, top, right, bottom) to the tracker
 coords = f"screen_pixel_coords = 0 0 {SCN_W - 1} {SCN_H - 1}"
@@ -27,7 +72,7 @@ genv = EyeLinkCoreGraphicsPsychoPy(tk, win)
 pylink.openGraphicsEx(genv)
 
 # Calibrate the tracker
-calib_msg = visual.TextStim(win, text='Press ENTER twice to calibrate') 
+calib_msg = visual.TextStim(win, text='Press ENTER twice to calibrate',height=50) 
 calib_msg.draw()
 win.flip()
 tk.doTrackerSetup()
@@ -36,10 +81,16 @@ tk.doTrackerSetup()
 # Run 3 trials in a for-loop
 # in each trial, first show a fixation dot, wait for the participant # to gaze at the fixation dot, then present an image for 2 secs
 for i in range(3):
-    # Prepare the fixation dot in memory
-    fix = visual.GratingStim(win, tex='None', mask='circle', size=30.0)
-    # Load the image
-    img = visual.ImageStim(win, image='./woods.jpg', size=(SCN_W, SCN_H))
+    
+    
+   tk.sendMessage(f'TRIALID {i}')
+   
+   
+   # Prepare the fixation dot in memory
+    fix = visual.GratingStim(win, tex='None', mask='circle', size=50, pos=(0,400), color='black')
+
+
+
     # Put tracker in Offline mode before we start recording
     tk.setOfflineMode()
     # Start recording
@@ -52,7 +103,7 @@ for i in range(3):
     # read data from the right eye if tracking in binocular mode 
     eye_to_read = tk.eyeAvailable()
     if eye_to_read == 2:
-            eye_to_read = 1
+        eye_to_read = 1
     
     # Show the fixation dot
     fix.draw()
@@ -77,7 +128,7 @@ for i in range(3):
                 gaze_x, gaze_y = ev.getAverageGaze() 
                 gaze_error = hypot((gaze_x - fix_dot_x)/ppd_x,
                                                    (gaze_y - fix_dot_y)/ppd_y)
-                if gaze_error < 1.5:
+                if gaze_error < 5:
                     # Update fixation_start_time, following the first 
                     # FIXUPDATE event
                     if fixation_start_time < 0:
@@ -85,19 +136,24 @@ for i in range(3):
                     else:
                     # Break if the gaze is on the fixation dot
                     # for > 300 ms
-                        if (ev.getEndTime() - fixation_start_time) >= 300:
+                        if (ev.getEndTime() - fixation_start_time) >= 5:
                             triggered = True 
                 else:
                     fixation_start_time = -32768
-    # Show the image for 2 secs 
-    img.draw()
-    win.flip()
-    core.wait(2.0)
+    
+   
+   
+    
+    interest_areas(win, tk)
+
     
     # Clear the screen
     win.color = (0, 0, 0)
     win.flip()
     core.wait(0.5)
+    
+    # END
+    tk.sendMessage('TRIAL_END 0')
     
     # Stop recording
     tk.stopRecording()
@@ -108,7 +164,7 @@ for i in range(3):
 tk.closeDataFile()
 
 # Download the EDF data file from Host
-tk.receiveDataFile('psychopy.edf', 'psychopy.edf')
+tk.receiveDataFile('psychopy.edf', 'interest_area.edf')
 # Close the link to the tracker
 tk.close()
 # Close the graphics

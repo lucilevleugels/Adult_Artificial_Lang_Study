@@ -25,8 +25,12 @@ def interest_areas(win, tk):
     escape_key = 'escape'
     space_key = 'space'
     escape_pressed = False
-
-    #tk.sendMessage('!V IMGLOAD FILL ./cube.png')
+    
+    
+    tk.sendMessage('!V IMGLOAD CENTER ./cube.png')
+#    tk.sendMessage(f'!V TRIAL_VAR ')
+#    tk.sendMessage(f'!V TRIAL_VAR position ')
+    
     while position_index < len(positions):
         position_name = list(positions.keys())[position_index]
         
@@ -34,8 +38,7 @@ def interest_areas(win, tk):
         
         position = list(positions.values())[position_index]
         
-        tk.sendMessage(f'!V TRIAL_VAR coord {position} ')
-        tk.sendMessage(f'!V TRIAL_VAR position {position_name}')
+       
             
         cube_image.pos = position
         cube_image.draw()
@@ -44,6 +47,8 @@ def interest_areas(win, tk):
         # Wait for the Spacebar key press to move to the next position
         keys = event.waitKeys(keyList=[space_key, escape_key])
         if space_key in keys:
+            tk.sendMessage(f'!V TRIAL_VAR key Pressed')
+            tk.sendMessage(f'!V TRIAL_VAR position {position_name}')
             position_index += 1
         elif escape_key in keys:
             escape_pressed = True
@@ -160,16 +165,16 @@ for i in range(4):
     
     
     
-    # Stop recording
-    tk.stopRecording()
+# Stop recording
+tk.stopRecording()
    
-    tk.sendMessage('TRIAL_END 0')
+tk.sendMessage('TRIAL_END 0')
 
     
     
     
-    # Close the EDF data file on the Host
-    tk.closeDataFile()
+# Close the EDF data file on the Host
+tk.closeDataFile()
     
 # Close the EDF data file on the Host
 tk.closeDataFile()

@@ -33,8 +33,8 @@ def interest_areas(win, tk):
         
         position = list(positions.values())[position_index]
         
-        tk.sendMessage('!V TRIAL_VAR coord {position} ')
-        tk.sendMessage('!V TRIAL_VAR position {position_name}')
+        tk.sendMessage(f'!V TRIAL_VAR coord {position} ')
+        tk.sendMessage(f'!V TRIAL_VAR position {position_name}')
             
         cube_image.pos = position
         cube_image.draw()
@@ -65,7 +65,7 @@ tk.sendCommand(f'link_event_filter = {event_flags}')
 # Screen resolution
 SCN_W, SCN_H = (1580, 1280)
 # Open a PsyhocPy window
-win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix')
+win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix', )
 
 
 # Pass the display pixel coordinates (left, top, right, bottom) to the tracker
@@ -85,7 +85,7 @@ tk.doTrackerSetup()
 
 # Run 3 trials in a for-loop
 # in each trial, first show a fixation dot, wait for the participant # to gaze at the fixation dot, then present an image for 2 secs
-for i in range(3):
+for i in range(4):
     
     
     tk.sendMessage(f'TRIALID {i}')

@@ -1,14 +1,19 @@
 import pylink
 from psychopy import visual, core, sound, event, gui, data, monitors
 import pandas as pd 
+import datetime
 import os 
 from EyeLinkCoreGraphicsPsychoPy import EyeLinkCoreGraphicsPsychoPy
 from math import hypot
 
 
+#BLOCK DICTIONARY
+BLOCK_DATA_TEST = []
+BLOCK_DATA_TRAIN = []
+
 def training_block(win, training_phase_text, train_df, iteration ):
     
-    BLOCK_DATA_TRAIN = []
+    
     
     training_phase_text.draw()
     win.flip()
@@ -62,9 +67,143 @@ def training_block(win, training_phase_text, train_df, iteration ):
                 
             win.flip()
             
-            BLOCK_DATA_TRAIN.append(block_data)
+            return block_data
             keys = event.waitKeys(keyList=['space']) 
             
+            
+def testing_block(win, testing_phase_test, test_df, iteration ):
+    
+    
+    
+    testing_phase_text.draw()
+    win.flip()
+      
+    control = event.waitKeys(keyList=['space'])
+
+    if control[0] == 'space':
+        
+        for i,row in enumerate(test_df.iterrows(),1):
+            block_data = {}
+            
+            block_data['block'] = iteration + 1 
+            block_data['trial'] = i
+            
+            trial_data = row[1]
+            #print(trial_data)
+            
+            if CONDITION == 1:
+                condition_column = f"Target_audio_cond{CONDITION}"
+                audio_path = os.path.join('Audio',trial_data[condition_column] + '.wav')
+            else:
+                condition_column = f"Target_audio_cond{CONDITION}"
+                audio_path = os.path.join('Audio',trial_data[condition_column] + '.wav')
+            
+            sound_stim = sound.Sound(audio_path)
+            
+            target_images = trial_data['Target_image'].split(',')
+            foil_images = trial_data['Foil_image'].split(',')
+            
+            block_data['Target_image'] = target_images
+            block_data['Foil_image'] = foil_images
+        
+            block_data['Target_audio_cond1'] = trial_data['Target_audio_cond1']
+            block_data['Target_audio_cond2 '] = trial_data['Target_audio_cond2']
+            
+            
+            target_location = trial_data['Target_Location']
+            if target_location == 'left':
+                foil_location = 'right' 
+            else:
+                foil_location = 'left'
+                
+            block_data['Target_Location'] = target_location
+
+
+            # Create image stimuli for target and foil images
+            if target_location == 'left':
+                target_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip()), size=(61, 61)) for img in target_images]
+                foil_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip()), size=(61, 61)) for img in foil_images]
+            else:
+                target_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip()), size=(61, 61)) for img in target_images]
+                foil_stimuli = [visual.ImageStim(win, image=os.path.join('Images',img.strip()), size=(61, 61)) for img in foil_images]
+                
+                target_stimuli, foil_stimuli = foil_stimuli, target_stimuli
+                
+#                
+#            # Calculate the positions for target and foil stimuli
+#            y_position = 0  # Adjust as needed
+#            
+#            # Calculate the total width of the target and foil stimuli based on the window size
+#            total_target_width = len(target_stimuli) * 70  # Adjust the horizontal spacing as needed
+#            total_foil_width = len(foil_stimuli) * 70  # Adjust the horizontal spacing as needed
+#
+#
+#            # Calculate the total width of the target and foil stimuli based on the window size
+#            win_width = 1280
+#            # Calculate the starting positions to center the stimuli based on the window size
+#            x_start_target = -(total_target_width + total_foil_width) / 2 + win_width / 2
+#
+#            # Set horizontal positions for target stimuli
+#            for i, target in enumerate(target_stimuli):
+#                target_x = x_start_target + (i * 70)  # Adjust the horizontal spacing as needed
+#                target.pos = (target_x, y_position)
+#
+#            # Set horizontal positions for foil stimuli
+#            for i, foil in enumerate(foil_stimuli):
+#                foil_x = x_start_target + (total_target_width / 2) + (i * 70)  # Adjust the horizontal spacing as needed
+#                foil.pos = (foil_x, y_position)
+#
+#            # Display all target stimuli and foil stimuli
+#            for target in target_stimuli:
+#                target.draw()
+#            for foil in foil_stimuli:
+#                foil.draw()
+
+
+            # Calculate the positions for target and foil stimuli
+            y_position = 0  # Adjust as needed
+
+            # Set horizontal positions for target stimuli on the left
+            x_offset_target = -300  # Adjust as needed
+            spacing_target = 70  # Adjust the horizontal spacing as needed
+            for i, target in enumerate(target_stimuli):
+                target_x = x_offset_target + (i * spacing_target)
+                target.pos = (target_x, y_position)
+
+            # Set horizontal positions for foil stimuli on the right
+            x_offset_foil = 200  # Adjust as needed
+            spacing_foil = 70  # Adjust the horizontal spacing as needed
+            for i, foil in enumerate(foil_stimuli):
+                foil_x = x_offset_foil + (i * spacing_foil)
+                foil.pos = (foil_x, y_position)
+
+            # Display all target stimuli and foil stimuli
+            sound_stim.play()
+            for target in target_stimuli:
+                target.draw()
+            for foil in foil_stimuli:
+                foil.draw()
+
+            # Update the window to show the stimuli
+            win.flip()
+            
+        
+            
+            start_time = core.getTime()
+            keys = event.waitKeys(keyList=['left', 'right', 'escape'])
+            elapsed_time = core.getTime() - start_time
+            block_data['Response Time'] = elapsed_time
+
+            answer = 'left' if 'left' in keys else 'right'
+            block_data['Answer'] = answer
+            block_data['Accuracy'] = 1 if answer == target_location else 0
+            
+
+            
+            if 'escape' in keys:
+                break
+            
+            return block_data
 
 
 # CONDITION 
@@ -79,8 +218,7 @@ train_df = pd.read_csv('Trial_Info/Training_Trails_Adult_Lang_Study.csv')
 test_df = pd.read_csv('Trial_Info/Testing_Trials_Adult_Lang_Study.csv')
 
 
-#BLOCK DICTIONARY
-BLOCK_DATA_TEST = []
+
 
 
 # Connect to the tracker
@@ -97,7 +235,7 @@ tk.sendCommand(f'link_event_filter = {event_flags}')
 # Screen resolution
 SCN_W, SCN_H = (2280, 1580)
 # Open a PsyhocPy window
-win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix')
+win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix', color=(1,1,1))
 
 
 # INFORMATION 
@@ -189,7 +327,13 @@ for i in range(1):
    
    
 
-    training_block(win, training_phase_text, train_df, i)
+    train_block_data = training_block(win, training_phase_text, train_df, i)
+    # can introduce some kind of delay here in between
+    test_block_data  = testig_block(win, testing_phase_text, train_df, i)
+    
+    BLOCK_DATA_TRAIN.append(train_block_data)
+    BLOCK_DATA_TEST.append(test_block_data)
+    
 
     
     # Clear the screen
@@ -205,8 +349,17 @@ for i in range(1):
 # Close the EDF data file on the Host
 tk.closeDataFile()
 
+# SAVING BLOCK DATA
+train_block_df = pd.DataFrame(BLOCK_DATA_TRAIN).fillna('-')
+train_block_df.to_csv('SOURCE-CSV.csv')
+
+test_block_df = pd.DataFrame(BLOCK_DATA_TEST)
+test_block_df.to_csv('Test.csv')
+
+
 # Download the EDF data file from Host
-tk.receiveDataFile('psychopy.edf', 'psychopy.edf')
+timestring = datetime.datetime.now().strftime("%H:%M:%S_%d_%b_%Y")
+tk.receiveDataFile('psychopy.edf', f'Adult_study_{timestring}.edf')
 # Close the link to the tracker
 tk.close()
 # Close the graphics

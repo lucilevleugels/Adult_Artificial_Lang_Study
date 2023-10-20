@@ -25,12 +25,17 @@ def interest_areas(win, tk):
     space_key = 'space'
     escape_pressed = False
 
-    tk.sendMessage('!V IMGLOAD FILL ./cube.png')
+    #tk.sendMessage('!V IMGLOAD FILL ./cube.png')
     while position_index < len(positions):
         position_name = list(positions.keys())[position_index]
         
         tk.sendMessage(f'image_onset - {position_name}')
+        
         position = list(positions.values())[position_index]
+        
+        tk.sendMessage('!V TRIAL_VAR coord {position} ')
+        tk.sendMessage('!V TRIAL_VAR position {position_name}')
+            
         cube_image.pos = position
         cube_image.draw()
         win.flip()
@@ -58,7 +63,7 @@ tk.setOfflineMode()
 event_flags = 'LEFT,RIGHT,FIXATION,FIXUPDATE,SACCADE,BLINK,BUTTON,INPUT'
 tk.sendCommand(f'link_event_filter = {event_flags}')
 # Screen resolution
-SCN_W, SCN_H = (2280, 1580)
+SCN_W, SCN_H = (1580, 1280)
 # Open a PsyhocPy window
 win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix')
 
@@ -83,10 +88,10 @@ tk.doTrackerSetup()
 for i in range(3):
     
     
-   tk.sendMessage(f'TRIALID {i}')
+    tk.sendMessage(f'TRIALID {i}')
    
    
-   # Prepare the fixation dot in memory
+    # Prepare the fixation dot in memory
     fix = visual.GratingStim(win, tex='None', mask='circle', size=50, pos=(0,400), color='black')
 
 
@@ -128,7 +133,7 @@ for i in range(3):
                 gaze_x, gaze_y = ev.getAverageGaze() 
                 gaze_error = hypot((gaze_x - fix_dot_x)/ppd_x,
                                                    (gaze_y - fix_dot_y)/ppd_y)
-                if gaze_error < 5:
+                if gaze_error < 4.5 :
                     # Update fixation_start_time, following the first 
                     # FIXUPDATE event
                     if fixation_start_time < 0:
@@ -136,14 +141,14 @@ for i in range(3):
                     else:
                     # Break if the gaze is on the fixation dot
                     # for > 300 ms
-                        if (ev.getEndTime() - fixation_start_time) >= 5:
+                        if (ev.getEndTime() - fixation_start_time) >= 10:
                             triggered = True 
                 else:
                     fixation_start_time = -32768
     
    
    
-    
+    tk.sendMessage(f'Gaze Contingent Triggered')
     interest_areas(win, tk)
 
     
@@ -152,11 +157,16 @@ for i in range(3):
     win.flip()
     core.wait(0.5)
     
-    # END
-    tk.sendMessage('TRIAL_END 0')
+    
     
     # Stop recording
     tk.stopRecording()
+   
+    tk.sendMessage('TRIAL_END 0')
+
+    
+    
+    
     # Close the EDF data file on the Host
     tk.closeDataFile()
     

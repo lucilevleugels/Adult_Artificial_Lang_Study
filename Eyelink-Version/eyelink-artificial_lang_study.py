@@ -27,11 +27,9 @@ train_df = pd.read_csv('Trial_Info/Training_Trails_Adult_Lang_Study.csv')
 test_df = pd.read_csv('Trial_Info/Testing_Trials_Adult_Lang_Study.csv')
 
 
-
 #BLOCK DICTIONARY
 BLOCK_DATA_TRAIN = []
 BLOCK_DATA_TEST = []
-
 
 
 # Connect to the tracker

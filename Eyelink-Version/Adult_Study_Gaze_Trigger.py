@@ -14,7 +14,6 @@ BLOCK_DATA_TRAIN = []
 def training_block(win, training_phase_text, train_df, iteration ):
     
     
-    
     training_phase_text.draw()
     win.flip()
     
@@ -38,7 +37,10 @@ def training_block(win, training_phase_text, train_df, iteration ):
             
             block_data['audio'] = audio_path[:-4]
     
+            tk.sendMessage(f'Sound {trial_data[condition_column]} Start')
+            tk.sendMessage(f'!V TRIAL_VAR Audio {trial_data[condition_column]}')
             #sound_stim = sound.Sound(audio_path)
+            tk.sendMessage(f'Sound {trial_data[condition_column]} End')
             images = trial_data['Visual'].split(',')
             
             for j, image in enumerate(images,1):
@@ -62,10 +64,12 @@ def training_block(win, training_phase_text, train_df, iteration ):
             
             # Presenting Images
             #sound_stim.play()
+            tk.sendMessage(f'Image Stimulus Presentation Start')
             for image_stim in image_stims:
                 image_stim.draw()
                 
             win.flip()
+            tk.sendMessage(f'Image Stimulus Presentation End')
             
             return block_data
             keys = event.waitKeys(keyList=['space']) 
@@ -98,7 +102,12 @@ def testing_block(win, testing_phase_test, test_df, iteration ):
                 condition_column = f"Target_audio_cond{CONDITION}"
                 audio_path = os.path.join('Audio',trial_data[condition_column] + '.wav')
             
-            sound_stim = sound.Sound(audio_path)
+            
+            
+            tk.sendMessage(f'Sound {trial_data[condition_column]} Start')
+            tk.sendMessage(f'!V TRIAL_VAR Audio {trial_data[condition_column]}')
+            #sound_stim = sound.Sound(audio_path)
+            tk.sendMessage(f'Sound {trial_data[condition_column]} End')
             
             target_images = trial_data['Target_image'].split(',')
             foil_images = trial_data['Foil_image'].split(',')
@@ -109,7 +118,7 @@ def testing_block(win, testing_phase_test, test_df, iteration ):
             block_data['Target_audio_cond1'] = trial_data['Target_audio_cond1']
             block_data['Target_audio_cond2 '] = trial_data['Target_audio_cond2']
             
-            
+            tk.sendMessage(f'!V TRIAL_VAR Target-Location {target_location}')
             target_location = trial_data['Target_Location']
             if target_location == 'left':
                 foil_location = 'right' 
@@ -327,8 +336,10 @@ for i in range(1):
    
    
 
+    tk.sendMessage(f'!V TRIAL_VAR Train-Block {i}')
     train_block_data = training_block(win, training_phase_text, train_df, i)
     # can introduce some kind of delay here in between
+    tk.sendMessage(f'!V TRIAL_VAR Test-Block {i}')
     test_block_data  = testig_block(win, testing_phase_text, train_df, i)
     
     BLOCK_DATA_TRAIN.append(train_block_data)

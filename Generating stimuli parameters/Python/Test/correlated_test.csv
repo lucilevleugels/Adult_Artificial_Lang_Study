@@ -1,0 +1,13 @@
+trial,item1,item2,item3,casemarker1,casemarker2,casemarker3,final,condition,foil_category,foil
+3,bimdah,pakrid,rakken,nellby,chelad,limeber,bimdah nellby pakrid chelad rakken limeber,correlated,transposition,"['pakrid', 'bimdah', 'rakken']"
+8,fisslin,makkot,rakken,nellby,chelad,limeber,fisslin nellby makkot chelad rakken limeber,correlated,transposition,"['rakken', 'makkot', 'fisslin']"
+39,bimdah,pakrid,dingep,nellby,chelad,limeber,bimdah nellby pakrid chelad dingep limeber,correlated,transposition,"['pakrid', 'bimdah', 'dingep']"
+35,barget,haagle,goorshell,nellby,chelad,limeber,barget nellby haagle chelad goorshell limeber,correlated,transposition,"['goorshell', 'barget', 'haagle']"
+14,goorshell,haagle,pakrid,nellby,chelad,limeber,goorshell nellby haagle chelad pakrid limeber,correlated,transposition,"['pakrid', 'goorshell', 'haagle']"
+41,dingep,makkot,rakken,nellby,chelad,limeber,dingep nellby makkot chelad rakken limeber,correlated,transposition,"['rakken', 'dingep', 'makkot']"
+7,pakrid,goorshell,fisslin,nellby,chelad,limeber,pakrid nellby goorshell chelad fisslin limeber,correlated,itemchange,"['pakrid', 'dingep', 'fisslin']"
+42,fisslin,barget,pakrid,nellby,chelad,limeber,fisslin nellby barget chelad pakrid limeber,correlated,itemchange,"['fisslin', 'barget', 'dingep']"
+38,fisslin,rakken,makkot,nellby,chelad,limeber,fisslin nellby rakken chelad makkot limeber,correlated,itemchange,"['fisslin', 'barget', 'makkot']"
+2,pakrid,rakken,barget,nellby,chelad,limeber,pakrid nellby rakken chelad barget limeber,correlated,itemchange,"['pakrid', 'dingep', 'barget']"
+21,rakken,fisslin,haagle,nellby,chelad,limeber,rakken nellby fisslin chelad haagle limeber,correlated,itemchange,"['rakken', 'bimdah', 'haagle']"
+46,haagle,bimdah,pakrid,nellby,chelad,limeber,haagle nellby bimdah chelad pakrid limeber,correlated,itemchange,"['goorshell', 'bimdah', 'pakrid']"

@@ -1,0 +1,21 @@
+trial,item1,item2,item3,casemarker1,casemarker2,casemarker3,final,condition
+1,rakken,dingep,pakrid,limeber,chelad,nellby,rakken limeber dingep chelad pakrid nellby,isolated-left
+2,rakken,makkot,pakrid,limeber,nellby,chelad,rakken limeber makkot nellby pakrid chelad,isolated-left
+3,barget,dingep,sumbark,limeber,nellby,chelad,barget limeber dingep nellby sumbark chelad,isolated-left
+4,bimdah,haagle,pakrid,limeber,nellby,chelad,bimdah limeber haagle nellby pakrid chelad,isolated-left
+5,fisslin,goorshell,haagle,limeber,nellby,chelad,fisslin limeber goorshell nellby haagle chelad,isolated-left
+6,rakken,makkot,fisslin,limeber,nellby,chelad,rakken limeber makkot nellby fisslin chelad,isolated-left
+7,dingep,goorshell,sumbark,limeber,chelad,nellby,dingep limeber goorshell chelad sumbark nellby,isolated-left
+8,rakken,dingep,sumbark,limeber,nellby,chelad,rakken limeber dingep nellby sumbark chelad,isolated-left
+9,goorshell,makkot,sumbark,limeber,chelad,nellby,goorshell limeber makkot chelad sumbark nellby,isolated-left
+10,haagle,pakrid,rakken,limeber,nellby,chelad,haagle limeber pakrid nellby rakken chelad,isolated-left
+11,bimdah,haagle,goorshell,limeber,chelad,nellby,bimdah limeber haagle chelad goorshell nellby,isolated-left
+12,barget,fisslin,haagle,limeber,nellby,chelad,barget limeber fisslin nellby haagle chelad,isolated-left
+13,sumbark,fisslin,makkot,limeber,chelad,nellby,sumbark limeber fisslin chelad makkot nellby,isolated-left
+14,fisslin,haagle,bimdah,limeber,nellby,chelad,fisslin limeber haagle nellby bimdah chelad,isolated-left
+15,makkot,rakken,haagle,limeber,nellby,chelad,makkot limeber rakken nellby haagle chelad,isolated-left
+16,pakrid,haagle,bimdah,limeber,chelad,nellby,pakrid limeber haagle chelad bimdah nellby,isolated-left
+17,barget,goorshell,makkot,limeber,chelad,nellby,barget limeber goorshell chelad makkot nellby,isolated-left
+18,barget,fisslin,makkot,limeber,chelad,nellby,barget limeber fisslin chelad makkot nellby,isolated-left
+19,rakken,pakrid,haagle,limeber,chelad,nellby,rakken limeber pakrid chelad haagle nellby,isolated-left
+20,sumbark,haagle,rakken,limeber,chelad,nellby,sumbark limeber haagle chelad rakken nellby,isolated-left

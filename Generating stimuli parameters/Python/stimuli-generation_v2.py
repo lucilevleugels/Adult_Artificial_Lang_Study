@@ -1,6 +1,8 @@
 import random
 from itertools import permutations
 import pandas as pd
+import os
+import shutil
 import warnings
 import random
 from itertools import permutations
@@ -10,6 +12,10 @@ warnings.filterwarnings('ignore')
 
 # Set seed for reproducibility
 random.seed(123)
+
+# create train and test directories 
+os.makedirs('./Train/', exist_ok=True)
+os.makedirs('./Test/', exist_ok=True)
 
 
 
@@ -93,9 +99,13 @@ def generate_training_conditions(valid_permutations):
     # Combine the DataFrames for different combinations
     combined_df = pd.concat(rows, ignore_index=True)
 
-    print('saving train-csv')
-    combined_df.to_csv('train_v3.csv',index=False)
-
+    print('Saving train-csv')
+    combined_df.to_csv('./Train/train_v3.csv',index=False)
+    print("Invididualising by condition")
+    print("Saving files")
+    for condition in combined_df['condition'].unique():
+        print(f"- {condition}")
+        combined_df[combined_df['condition']==condition].to_csv(f'./Train/{condition}_train.csv',index=False)
 
     return selected_permutations, remaining_items
 
@@ -236,8 +246,14 @@ def generate_test_conditions(valid_permutations, selected_permutations, remainin
 
     final_test_df = pd.concat([corr_df,iso_left_df,iso_center_df,iso_right_df],axis=0)
 
-    print('saving test-csv')
-    final_test_df.to_csv('test_v3.csv',index=False)
+    print('Saving test-csv')
+    final_test_df.to_csv('./Test/test_v3.csv',index=False)
+    print("Invididualising by condition")
+    print("Saving files")
+    for condition in final_test_df['condition'].unique():
+        print(f"- {condition}")
+        final_test_df[final_test_df['condition']==condition].to_csv(f'./Test/{condition}_test.csv',index=False)
+
 
 
 
@@ -259,6 +275,7 @@ if __name__ == '__main__':
 
 
     selected_permutations, remaining_items = generate_training_conditions(valid_permutations)
+    print("--"*25)
     generate_test_conditions(valid_permutations, selected_permutations, remaining_items)
 
 

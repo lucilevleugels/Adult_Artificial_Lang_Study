@@ -1,17 +1,5 @@
 ,block,trial,Target_image,Foil_image,Target_audio_cond1,Target_audio_cond2 ,Target_Location,Response Time,Answer,Accuracy
-0,1,1,"['Picture1.png', ' Picture2.png', ' Picture1.png']","['Picture1.png', ' Picture1.png']",ti zu bi bo ti,za,right,2.6736931250197813,right,1
-1,1,2,"['Picture1.png', ' Picture2.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti zu bi bo bi,ga,right,2.3888545829977375,left,0
-2,1,3,"['Picture1.png', ' Picture1.png']","['Picture1.png', ' Picture2.png']",ti bo ti,ta ,left,1.423762499995064,left,1
-3,1,4,"['Picture1.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti bo bi,bla ,left,1.9619775829778519,left,1
-4,2,1,"['Picture1.png', ' Picture1.png']","['Picture1.png', ' Picture2.png']",ti bo ti,ta ,left,0.5670654580171686,left,1
-5,2,2,"['Picture1.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti bo bi,bla ,left,0.02758912497665733,left,1
-6,2,3,"['Picture1.png', ' Picture2.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti zu bi bo bi,ga,right,0.015731333987787366,right,1
-7,2,4,"['Picture1.png', ' Picture2.png', ' Picture1.png']","['Picture1.png', ' Picture1.png']",ti zu bi bo ti,za,right,0.056809915986377746,right,1
-8,3,1,"['Picture1.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti bo bi,bla ,left,0.462142042000778,left,1
-9,3,2,"['Picture1.png', ' Picture2.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti zu bi bo bi,ga,right,0.05719004198908806,left,0
-10,3,3,"['Picture1.png', ' Picture1.png']","['Picture1.png', ' Picture2.png']",ti bo ti,ta ,left,0.06737737500225194,left,1
-11,3,4,"['Picture1.png', ' Picture2.png', ' Picture1.png']","['Picture1.png', ' Picture1.png']",ti zu bi bo ti,za,right,0.013335374998860061,left,0
-12,4,1,"['Picture1.png', ' Picture2.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti zu bi bo bi,ga,right,0.4426566250040196,left,0
-13,4,2,"['Picture1.png', ' Picture2.png', ' Picture1.png']","['Picture1.png', ' Picture1.png']",ti zu bi bo ti,za,right,0.03432325000176206,left,0
-14,4,3,"['Picture1.png', ' Picture1.png']","['Picture1.png', ' Picture2.png']",ti bo ti,ta ,left,0.07440249997307546,left,1
-15,4,4,"['Picture1.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti bo bi,bla ,left,0.04793737499858253,left,1
+0,1,1,"['Picture1.png', ' Picture2.png', ' Picture1.png']","['Picture1.png', ' Picture1.png']",ti zu bi bo ti,za,right,3.159900499973446,right,1
+1,1,2,"['Picture1.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti bo bi,bla ,left,0.30548710003495216,left,1
+2,1,3,"['Picture1.png', ' Picture1.png']","['Picture1.png', ' Picture2.png']",ti bo ti,ta ,left,0.0013506000395864248,left,1
+3,1,4,"['Picture1.png', ' Picture2.png', ' Picture2.png']","['Picture1.png', ' Picture2.png', ' Picture1.png']",ti zu bi bo bi,ga,right,0.402405499946326,left,0

@@ -27,7 +27,7 @@ testing_phase_text = visual.TextStim(win, text="Testing Phase", height=20 , colo
 BLOCK_DATA_TRAIN = []
 BLOCK_DATA_TEST = []
 
-for iteration in range(4):
+for iteration in range(1):
     
     # Shuffle
     test_df = test_df.sample(frac=1)

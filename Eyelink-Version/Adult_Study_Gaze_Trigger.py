@@ -11,7 +11,7 @@ from math import hypot
 BLOCK_DATA_TEST = []
 BLOCK_DATA_TRAIN = []
 
-def training_block(win, training_phase_text, train_df, iteration ):
+def training_block(win, training_phase_text, train_df, choice_data, iteration):
     
     
     training_phase_text.draw()
@@ -39,7 +39,7 @@ def training_block(win, training_phase_text, train_df, iteration ):
     
             tk.sendMessage(f'Sound {trial_data[condition_column]} Start')
             tk.sendMessage(f'!V TRIAL_VAR Audio {trial_data[condition_column]}')
-            #sound_stim = sound.Sound(audio_path)
+            sound_stim = sound.Sound(audio_path, stereo=True)
             tk.sendMessage(f'Sound {trial_data[condition_column]} End')
             images = trial_data['Visual'].split(',')
             
@@ -63,7 +63,7 @@ def training_block(win, training_phase_text, train_df, iteration ):
             
             
             # Presenting Images
-            #sound_stim.play()
+            sound_stim.play()
             tk.sendMessage(f'Image Stimulus Presentation Start')
             for image_stim in image_stims:
                 image_stim.draw()
@@ -71,11 +71,15 @@ def training_block(win, training_phase_text, train_df, iteration ):
             win.flip()
             tk.sendMessage(f'Image Stimulus Presentation End')
             
-            return block_data
-            keys = event.waitKeys(keyList=['space']) 
+            
+            keys = event.waitKeys(keyList=['space'])
+    
+    
+    
+    return block_data
             
             
-def testing_block(win, testing_phase_test, test_df, iteration ):
+def testing_block(win, testing_phase_test, test_df, choice_data, iteration ):
     
     
     
@@ -95,10 +99,14 @@ def testing_block(win, testing_phase_test, test_df, iteration ):
             trial_data = row[1]
             #print(trial_data)
             
-            if CONDITION == 1:
+            if choice_data[0] == "Condition 1":
+                CONDITION = 1 
+                condition_column = "Condition 1"
                 condition_column = f"Target_audio_cond{CONDITION}"
                 audio_path = os.path.join('Audio',trial_data[condition_column] + '.wav')
             else:
+                CONDITION = 2
+                condition_column = "Condition 2"
                 condition_column = f"Target_audio_cond{CONDITION}"
                 audio_path = os.path.join('Audio',trial_data[condition_column] + '.wav')
             
@@ -106,7 +114,7 @@ def testing_block(win, testing_phase_test, test_df, iteration ):
             
             tk.sendMessage(f'Sound {trial_data[condition_column]} Start')
             tk.sendMessage(f'!V TRIAL_VAR Audio {trial_data[condition_column]}')
-            #sound_stim = sound.Sound(audio_path)
+            sound_stim = sound.Sound(audio_path)
             tk.sendMessage(f'Sound {trial_data[condition_column]} End')
             
             target_images = trial_data['Target_image'].split(',')
@@ -118,7 +126,7 @@ def testing_block(win, testing_phase_test, test_df, iteration ):
             block_data['Target_audio_cond1'] = trial_data['Target_audio_cond1']
             block_data['Target_audio_cond2 '] = trial_data['Target_audio_cond2']
             
-            tk.sendMessage(f'!V TRIAL_VAR Target-Location {target_location}')
+            #tk.sendMessage(f'!V TRIAL_VAR Target-Location {target_location}')
             target_location = trial_data['Target_Location']
             if target_location == 'left':
                 foil_location = 'right' 
@@ -138,36 +146,6 @@ def testing_block(win, testing_phase_test, test_df, iteration ):
                 
                 target_stimuli, foil_stimuli = foil_stimuli, target_stimuli
                 
-#                
-#            # Calculate the positions for target and foil stimuli
-#            y_position = 0  # Adjust as needed
-#            
-#            # Calculate the total width of the target and foil stimuli based on the window size
-#            total_target_width = len(target_stimuli) * 70  # Adjust the horizontal spacing as needed
-#            total_foil_width = len(foil_stimuli) * 70  # Adjust the horizontal spacing as needed
-#
-#
-#            # Calculate the total width of the target and foil stimuli based on the window size
-#            win_width = 1280
-#            # Calculate the starting positions to center the stimuli based on the window size
-#            x_start_target = -(total_target_width + total_foil_width) / 2 + win_width / 2
-#
-#            # Set horizontal positions for target stimuli
-#            for i, target in enumerate(target_stimuli):
-#                target_x = x_start_target + (i * 70)  # Adjust the horizontal spacing as needed
-#                target.pos = (target_x, y_position)
-#
-#            # Set horizontal positions for foil stimuli
-#            for i, foil in enumerate(foil_stimuli):
-#                foil_x = x_start_target + (total_target_width / 2) + (i * 70)  # Adjust the horizontal spacing as needed
-#                foil.pos = (foil_x, y_position)
-#
-#            # Display all target stimuli and foil stimuli
-#            for target in target_stimuli:
-#                target.draw()
-#            for foil in foil_stimuli:
-#                foil.draw()
-
 
             # Calculate the positions for target and foil stimuli
             y_position = 0  # Adjust as needed
@@ -212,7 +190,7 @@ def testing_block(win, testing_phase_test, test_df, iteration ):
             if 'escape' in keys:
                 break
             
-            return block_data
+    return block_data
 
 
 # CONDITION 
@@ -259,10 +237,12 @@ tk.sendCommand(coords)
 # Request Pylink to use the custom EyeLinkCoreGraphicsPsychoPy library
 # to draw calibration graphics (target, camera image, etc.)
 genv = EyeLinkCoreGraphicsPsychoPy(tk, win)
+genv.setCalibrationSounds('off','off', 'off')
+
 pylink.openGraphicsEx(genv)
 
 # Calibrate the tracker
-calib_msg = visual.TextStim(win, text='Press ENTER twice to calibrate',height=50) 
+calib_msg = visual.TextStim(win, text='Press ENTER twice to calibrate',height=50, color='black') 
 calib_msg.draw()
 win.flip()
 tk.doTrackerSetup()
@@ -270,7 +250,7 @@ tk.doTrackerSetup()
 
 # Run 3 trials in a for-loop
 # in each trial, first show a fixation dot, wait for the participant # to gaze at the fixation dot, then present an image for 2 secs
-for i in range(1):
+for i in range(2):
     
     
      # Shuffle
@@ -337,10 +317,10 @@ for i in range(1):
    
 
     tk.sendMessage(f'!V TRIAL_VAR Train-Block {i}')
-    train_block_data = training_block(win, training_phase_text, train_df, i)
+    train_block_data = training_block(win, training_phase_text, train_df, choice_data, i)
     # can introduce some kind of delay here in between
     tk.sendMessage(f'!V TRIAL_VAR Test-Block {i}')
-    test_block_data  = testig_block(win, testing_phase_text, train_df, i)
+    test_block_data  = testing_block(win, testing_phase_text, test_df, choice_data, i)
     
     BLOCK_DATA_TRAIN.append(train_block_data)
     BLOCK_DATA_TEST.append(test_block_data)
@@ -362,15 +342,15 @@ tk.closeDataFile()
 
 # SAVING BLOCK DATA
 train_block_df = pd.DataFrame(BLOCK_DATA_TRAIN).fillna('-')
-train_block_df.to_csv('SOURCE-CSV.csv')
+train_block_df.to_csv('SOURCE-CSV_2.csv')
 
 test_block_df = pd.DataFrame(BLOCK_DATA_TEST)
-test_block_df.to_csv('Test.csv')
+test_block_df.to_csv('Test.csv_2')
 
 
 # Download the EDF data file from Host
-timestring = datetime.datetime.now().strftime("%H:%M:%S_%d_%b_%Y")
-tk.receiveDataFile('psychopy.edf', f'Adult_study_{timestring}.edf')
+#timestring = datetime.datetime.now().strftime("%H:%M:%S_%d_%b_%Y")
+tk.receiveDataFile('psychopy.edf', f'Adult_study_2.edf')
 # Close the link to the tracker
 tk.close()
 # Close the graphics

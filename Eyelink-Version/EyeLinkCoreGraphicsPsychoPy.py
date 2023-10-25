@@ -34,7 +34,7 @@ from psychopy.sound import Sound
 
 #allow to disable sound, or if we failed to initialize pygame.mixer or failed to load audio file
 #continue experiment without sound.
-DISABLE_AUDIO=False
+DISABLE_AUDIO=True
 
 
 # Show only critical log message in the console

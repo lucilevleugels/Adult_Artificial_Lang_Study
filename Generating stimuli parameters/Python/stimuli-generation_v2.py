@@ -33,7 +33,7 @@ def generate_transposition_foil(items,):
     return trans_foils
 
 
-def generate_training_conditions(valid_permutations):
+def generate_training_conditions(valid_permutations, image_association):
 
     # Randomly select 20 valid permutations
     selected_permutations = random.sample(valid_permutations, 20)
@@ -99,6 +99,23 @@ def generate_training_conditions(valid_permutations):
     # Combine the DataFrames for different combinations
     combined_df = pd.concat(rows, ignore_index=True)
 
+    # audio_sequences
+    audio_sequences = []
+    for row in combined_df[['item1','casemarker1','item2','casemarker2','item3','casemarker3']].iterrows():
+        seq = [word+'.wav' for word in row[1].to_list()]
+        audio_sequences.append(seq)
+    
+
+    combined_df['audio_sequence'] = audio_sequences
+
+    # image sequence 
+    image_sequence = []
+    for row in combined_df[['item1','item2','item3']].iterrows():
+        seq = [image_association[word] for word in row[1].to_list()]
+        image_sequence.append(seq)
+
+    combined_df['image_sequence'] = image_sequence
+
     print('Saving train-csv')
     combined_df.to_csv('./Train/train_v3.csv',index=False)
     print("Invididualising by condition")
@@ -110,7 +127,7 @@ def generate_training_conditions(valid_permutations):
     return selected_permutations, remaining_items
 
 
-def generate_test_conditions(valid_permutations, selected_permutations, remaining_items):
+def generate_test_conditions(valid_permutations, selected_permutations, remaining_items, image_association):
 
     # Randomly select 48 permutations from the remaining 20
     test_permutations = random.sample(list(set(valid_permutations) - set(selected_permutations)),48)
@@ -246,6 +263,40 @@ def generate_test_conditions(valid_permutations, selected_permutations, remainin
 
     final_test_df = pd.concat([corr_df,iso_left_df,iso_center_df,iso_right_df],axis=0)
 
+    audio_sequences = []
+    for row in final_test_df[['item1','casemarker1','item2','casemarker2','item3','casemarker3']].iterrows():
+        seq = [word+'.wav' for word in row[1].to_list()]
+        audio_sequences.append(seq)
+        
+        
+    final_test_df['target_audio_sequence'] = audio_sequences
+    # try:
+    #     final_test_df['foil_audio_sequence'] = final_test_df['foil'].apply(lambda x: [w+'.wav' for w in x])
+    # except:
+    #     final_test_df['foil_audio_sequence'] = final_test_df['foil'].apply(lambda x: [w+'.wav' for w in eval(x)])
+
+    # image sequence 
+    image_sequence = []
+    for row in final_test_df[['item1','item2','item3']].iterrows():
+        seq = [image_association[word] for word in row[1].to_list()]
+        image_sequence.append(seq)
+
+    final_test_df['target_image_sequence'] = image_sequence
+
+    try:
+        final_test_df['foil_image_sequence'] = final_test_df['foil'].apply(lambda x: [image_association[w] for w in x])
+    except:
+        final_test_df['foil_image_sequence'] = final_test_df['foil'].apply(lambda x: [image_association[w] for w in eval(x)])
+        
+
+    image_sequence = []
+    for row in final_test_df[['item1','item2','item3']].iterrows():
+        seq = [image_association[word] for word in row[1].to_list()]
+        image_sequence.append(seq)
+
+    final_test_df['target_image_sequence'] = image_sequence
+    
+
     print('Saving test-csv')
     final_test_df.to_csv('./Test/test_v3.csv',index=False)
     print("Invididualising by condition")
@@ -266,6 +317,18 @@ if __name__ == '__main__':
     # Randomly select 10 items from the pool
     selected_items = random.sample(syllabus_pool, 10)
 
+    images = os.listdir('../../Images')
+    # .DS_Store
+    try:
+        images.remove('.DS_Store')
+    except:
+        pass
+
+    image_association = {}
+    for image, item in zip(images, selected_items):
+        image_association[item] = image
+        
+
 
     # Generate all possible permutations of the selected items
     all_permutations = list(permutations(selected_items, 3))
@@ -274,9 +337,9 @@ if __name__ == '__main__':
     valid_permutations = [p for p in all_permutations if len(set(p)) == len(p)]
 
 
-    selected_permutations, remaining_items = generate_training_conditions(valid_permutations)
+    selected_permutations, remaining_items = generate_training_conditions(valid_permutations, image_association)
     print("--"*25)
-    generate_test_conditions(valid_permutations, selected_permutations, remaining_items)
+    generate_test_conditions(valid_permutations, selected_permutations, remaining_items, image_association)
 
 
 print('-'*25)

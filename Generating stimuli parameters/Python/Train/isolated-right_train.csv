@@ -1,21 +1,21 @@
-trial,item1,item2,item3,casemarker1,casemarker2,casemarker3,final,condition
-1,rakken,dingep,pakrid,limeber,nellby,chelad,rakken limeber dingep nellby pakrid chelad,isolated-right
-2,rakken,makkot,pakrid,nellby,limeber,chelad,rakken nellby makkot limeber pakrid chelad,isolated-right
-3,barget,dingep,sumbark,nellby,limeber,chelad,barget nellby dingep limeber sumbark chelad,isolated-right
-4,bimdah,haagle,pakrid,limeber,nellby,chelad,bimdah limeber haagle nellby pakrid chelad,isolated-right
-5,fisslin,goorshell,haagle,limeber,nellby,chelad,fisslin limeber goorshell nellby haagle chelad,isolated-right
-6,rakken,makkot,fisslin,nellby,limeber,chelad,rakken nellby makkot limeber fisslin chelad,isolated-right
-7,dingep,goorshell,sumbark,nellby,limeber,chelad,dingep nellby goorshell limeber sumbark chelad,isolated-right
-8,rakken,dingep,sumbark,nellby,limeber,chelad,rakken nellby dingep limeber sumbark chelad,isolated-right
-9,goorshell,makkot,sumbark,nellby,limeber,chelad,goorshell nellby makkot limeber sumbark chelad,isolated-right
-10,haagle,pakrid,rakken,limeber,nellby,chelad,haagle limeber pakrid nellby rakken chelad,isolated-right
-11,bimdah,haagle,goorshell,nellby,limeber,chelad,bimdah nellby haagle limeber goorshell chelad,isolated-right
-12,barget,fisslin,haagle,limeber,nellby,chelad,barget limeber fisslin nellby haagle chelad,isolated-right
-13,sumbark,fisslin,makkot,limeber,nellby,chelad,sumbark limeber fisslin nellby makkot chelad,isolated-right
-14,fisslin,haagle,bimdah,limeber,nellby,chelad,fisslin limeber haagle nellby bimdah chelad,isolated-right
-15,makkot,rakken,haagle,limeber,nellby,chelad,makkot limeber rakken nellby haagle chelad,isolated-right
-16,pakrid,haagle,bimdah,nellby,limeber,chelad,pakrid nellby haagle limeber bimdah chelad,isolated-right
-17,barget,goorshell,makkot,nellby,limeber,chelad,barget nellby goorshell limeber makkot chelad,isolated-right
-18,barget,fisslin,makkot,nellby,limeber,chelad,barget nellby fisslin limeber makkot chelad,isolated-right
-19,rakken,pakrid,haagle,limeber,nellby,chelad,rakken limeber pakrid nellby haagle chelad,isolated-right
-20,sumbark,haagle,rakken,limeber,nellby,chelad,sumbark limeber haagle nellby rakken chelad,isolated-right
+trial,item1,item2,item3,casemarker1,casemarker2,casemarker3,final,condition,audio_sequence,image_sequence
+1,rakken,dingep,pakrid,nellby,chelad,jeelow,rakken nellby dingep chelad pakrid jeelow,isolated-right,"['rakken.wav', 'nellby.wav', 'dingep.wav', 'chelad.wav', 'pakrid.wav', 'jeelow.wav']","['Picture2.png', 'Picture6.png', 'Picture3.png']"
+2,rakken,makkot,pakrid,chelad,nellby,jeelow,rakken chelad makkot nellby pakrid jeelow,isolated-right,"['rakken.wav', 'chelad.wav', 'makkot.wav', 'nellby.wav', 'pakrid.wav', 'jeelow.wav']","['Picture2.png', 'Picture4.png', 'Picture3.png']"
+3,barget,dingep,sumbark,chelad,nellby,jeelow,barget chelad dingep nellby sumbark jeelow,isolated-right,"['barget.wav', 'chelad.wav', 'dingep.wav', 'nellby.wav', 'sumbark.wav', 'jeelow.wav']","['Picture8.png', 'Picture6.png', 'Picture7.png']"
+4,bimdah,haagle,pakrid,nellby,chelad,jeelow,bimdah nellby haagle chelad pakrid jeelow,isolated-right,"['bimdah.wav', 'nellby.wav', 'haagle.wav', 'chelad.wav', 'pakrid.wav', 'jeelow.wav']","['Picture10.png', 'Picture1.png', 'Picture3.png']"
+5,fisslin,goorshell,haagle,nellby,chelad,jeelow,fisslin nellby goorshell chelad haagle jeelow,isolated-right,"['fisslin.wav', 'nellby.wav', 'goorshell.wav', 'chelad.wav', 'haagle.wav', 'jeelow.wav']","['Picture9.png', 'Picture5.png', 'Picture1.png']"
+6,rakken,makkot,fisslin,chelad,nellby,jeelow,rakken chelad makkot nellby fisslin jeelow,isolated-right,"['rakken.wav', 'chelad.wav', 'makkot.wav', 'nellby.wav', 'fisslin.wav', 'jeelow.wav']","['Picture2.png', 'Picture4.png', 'Picture9.png']"
+7,dingep,goorshell,sumbark,chelad,nellby,jeelow,dingep chelad goorshell nellby sumbark jeelow,isolated-right,"['dingep.wav', 'chelad.wav', 'goorshell.wav', 'nellby.wav', 'sumbark.wav', 'jeelow.wav']","['Picture6.png', 'Picture5.png', 'Picture7.png']"
+8,rakken,dingep,sumbark,chelad,nellby,jeelow,rakken chelad dingep nellby sumbark jeelow,isolated-right,"['rakken.wav', 'chelad.wav', 'dingep.wav', 'nellby.wav', 'sumbark.wav', 'jeelow.wav']","['Picture2.png', 'Picture6.png', 'Picture7.png']"
+9,goorshell,makkot,sumbark,chelad,nellby,jeelow,goorshell chelad makkot nellby sumbark jeelow,isolated-right,"['goorshell.wav', 'chelad.wav', 'makkot.wav', 'nellby.wav', 'sumbark.wav', 'jeelow.wav']","['Picture5.png', 'Picture4.png', 'Picture7.png']"
+10,haagle,pakrid,rakken,nellby,chelad,jeelow,haagle nellby pakrid chelad rakken jeelow,isolated-right,"['haagle.wav', 'nellby.wav', 'pakrid.wav', 'chelad.wav', 'rakken.wav', 'jeelow.wav']","['Picture1.png', 'Picture3.png', 'Picture2.png']"
+11,bimdah,haagle,goorshell,chelad,nellby,jeelow,bimdah chelad haagle nellby goorshell jeelow,isolated-right,"['bimdah.wav', 'chelad.wav', 'haagle.wav', 'nellby.wav', 'goorshell.wav', 'jeelow.wav']","['Picture10.png', 'Picture1.png', 'Picture5.png']"
+12,barget,fisslin,haagle,nellby,chelad,jeelow,barget nellby fisslin chelad haagle jeelow,isolated-right,"['barget.wav', 'nellby.wav', 'fisslin.wav', 'chelad.wav', 'haagle.wav', 'jeelow.wav']","['Picture8.png', 'Picture9.png', 'Picture1.png']"
+13,sumbark,fisslin,makkot,nellby,chelad,jeelow,sumbark nellby fisslin chelad makkot jeelow,isolated-right,"['sumbark.wav', 'nellby.wav', 'fisslin.wav', 'chelad.wav', 'makkot.wav', 'jeelow.wav']","['Picture7.png', 'Picture9.png', 'Picture4.png']"
+14,fisslin,haagle,bimdah,nellby,chelad,jeelow,fisslin nellby haagle chelad bimdah jeelow,isolated-right,"['fisslin.wav', 'nellby.wav', 'haagle.wav', 'chelad.wav', 'bimdah.wav', 'jeelow.wav']","['Picture9.png', 'Picture1.png', 'Picture10.png']"
+15,makkot,rakken,haagle,nellby,chelad,jeelow,makkot nellby rakken chelad haagle jeelow,isolated-right,"['makkot.wav', 'nellby.wav', 'rakken.wav', 'chelad.wav', 'haagle.wav', 'jeelow.wav']","['Picture4.png', 'Picture2.png', 'Picture1.png']"
+16,pakrid,haagle,bimdah,chelad,nellby,jeelow,pakrid chelad haagle nellby bimdah jeelow,isolated-right,"['pakrid.wav', 'chelad.wav', 'haagle.wav', 'nellby.wav', 'bimdah.wav', 'jeelow.wav']","['Picture3.png', 'Picture1.png', 'Picture10.png']"
+17,barget,goorshell,makkot,chelad,nellby,jeelow,barget chelad goorshell nellby makkot jeelow,isolated-right,"['barget.wav', 'chelad.wav', 'goorshell.wav', 'nellby.wav', 'makkot.wav', 'jeelow.wav']","['Picture8.png', 'Picture5.png', 'Picture4.png']"
+18,barget,fisslin,makkot,chelad,nellby,jeelow,barget chelad fisslin nellby makkot jeelow,isolated-right,"['barget.wav', 'chelad.wav', 'fisslin.wav', 'nellby.wav', 'makkot.wav', 'jeelow.wav']","['Picture8.png', 'Picture9.png', 'Picture4.png']"
+19,rakken,pakrid,haagle,nellby,chelad,jeelow,rakken nellby pakrid chelad haagle jeelow,isolated-right,"['rakken.wav', 'nellby.wav', 'pakrid.wav', 'chelad.wav', 'haagle.wav', 'jeelow.wav']","['Picture2.png', 'Picture3.png', 'Picture1.png']"
+20,sumbark,haagle,rakken,nellby,chelad,jeelow,sumbark nellby haagle chelad rakken jeelow,isolated-right,"['sumbark.wav', 'nellby.wav', 'haagle.wav', 'chelad.wav', 'rakken.wav', 'jeelow.wav']","['Picture7.png', 'Picture1.png', 'Picture2.png']"

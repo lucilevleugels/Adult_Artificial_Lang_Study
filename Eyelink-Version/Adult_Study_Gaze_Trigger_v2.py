@@ -35,7 +35,7 @@ def training_block(win, training_phase_text, train_trial_df, choice_data, iterat
             images = eval(trial_data['image_sequence'])
                 
             audio_paths = [os.path.join("./Audio", item) for item in audio_items]
-            sound_stims = [sound.Sound(audio_path) for audio_path in audio_paths]
+            #sound_stims = [sound.Sound(audio_path) for audio_path in audio_paths]
 
             block_data['audio'] = audio_items
     
@@ -69,10 +69,15 @@ def training_block(win, training_phase_text, train_trial_df, choice_data, iterat
             win.flip()
             
             tk.sendMessage(f'!V TRIAL_VAR Audio-Train {audio_items}')
-            for sound_stim,audio in zip(sound_stims,audio_items):
+            
+            # for testing 
+            for audio in audio_items:
                 tk.sendMessage(f'Sound {audio} On_set')
-                sound_stim.play()
-                core.wait(0.6)
+            
+#            for sound_stim,audio in zip(sound_stims,audio_items):
+#                tk.sendMessage(f'Sound {audio} On_set')
+#                sound_stim.play()
+#                core.wait(0.6)
             tk.sendMessage(f'Sound stimulus presentation  -- End')
                 
            
@@ -110,7 +115,7 @@ def testing_block(win, testing_phase_test, test_trial_df, choice_data, iteration
             
             audio_items = eval(trial_data['target_audio_sequence'])
             audio_paths = [os.path.join("./Audio", item) for item in audio_items]
-            sound_stims = [sound.Sound(audio_path) for audio_path in audio_paths]
+            #sound_stims = [sound.Sound(audio_path) for audio_path in audio_paths]
             
             block_data['audio'] = audio_items
             
@@ -178,10 +183,13 @@ def testing_block(win, testing_phase_test, test_trial_df, choice_data, iteration
             win.flip()
             
             tk.sendMessage(f'!V TRIAL_VAR Audio-Train {audio_items}')
-            for sound_stim, audio in zip(sound_stim,audio_items):
+            # for testing 
+            for audio in audio_items:
                 tk.sendMessage(f'Sound {audio} On_set')
-                sound_stim.play()
-                core.wait(0.8)
+#            for sound_stim, audio in zip(sound_stim,audio_items):
+#                tk.sendMessage(f'Sound {audio} On_set')
+#                sound_stim.play()
+#                core.wait(0.8)
             tk.sendMessage(f'Sound stimulus presentation  -- End')
             
             start_time = core.getTime()
@@ -235,7 +243,7 @@ for condition in test_df['condition'].unique():
 # Connect to the tracker
 tk = pylink.EyeLink('100.1.1.1')
 # Open an EDF data file on the Host PC
-tk.openDataFile('adult_study.edf')
+tk.openDataFile('psychopy.edf')
 # Put the tracker in offline mode before we change tracking parameters
 tk.setOfflineMode()
 # Make all types of eye events available over the link, especially the
@@ -355,7 +363,6 @@ for i in range(2):
 
     
     # Clear the screen
-    win.color = (0, 0, 0)
     win.flip()
     core.wait(0.5)
     
@@ -367,6 +374,9 @@ tk.closeDataFile()
 
     
 # SAVING BLOCK DATA
+print(BLOCK_DATA_TRAIN)
+print("-")
+print(BLOCK_DATA_TEST)
 train_block_df = pd.DataFrame(BLOCK_DATA_TRAIN).fillna('-')
 train_block_df.to_csv('SOURCE-CSV_3.csv')
 
@@ -376,7 +386,7 @@ test_block_df.to_csv('Test_3.csv')
 
 # Download the EDF data file from Host
 #timestring = datetime.datetime.now().strftime("%H:%M:%S_%d_%b_%Y")
-tk.receiveDataFile('adult_study.edf', f'Adult_study_3.edf')
+tk.receiveDataFile('psychopy.edf', f'Adult_study_3.edf')
 # Close the link to the tracker
 tk.close()
 # Close the graphics

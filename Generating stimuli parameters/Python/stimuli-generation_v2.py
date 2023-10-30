@@ -5,13 +5,14 @@ import os
 import shutil
 import warnings
 import random
+import numpy as np
 from itertools import permutations
 
 warnings.filterwarnings('ignore')
 
 
 # Set seed for reproducibility
-random.seed(123)
+np.random.seed(123)
 
 # create train and test directories 
 os.makedirs('./Train/', exist_ok=True)
@@ -260,6 +261,16 @@ def generate_test_conditions(valid_permutations, selected_permutations, remainin
     iso_left_df = test_df[test_df['condition']=='isolated-left']
     iso_center_df = test_df[test_df['condition']=='isolated-center']
     iso_right_df = test_df[test_df['condition']=='isolated-right']
+
+    for conditional_df in [corr_df,iso_left_df,iso_center_df,iso_right_df]:
+
+        size = conditional_df.shape[0]//2
+        lefts = ['left'] * size
+        rights = ['right'] * size
+        target_loc = np.array(lefts+rights)
+        np.random.shuffle(target_loc)
+        conditional_df['target_loc'] = target_loc
+      
 
     final_test_df = pd.concat([corr_df,iso_left_df,iso_center_df,iso_right_df],axis=0)
 

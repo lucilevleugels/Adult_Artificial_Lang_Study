@@ -46,6 +46,8 @@ for iteration in range(1):
     
     train_trial_df = train_dfs[choice_data[0]].sample(frac=1)
     test_trial_df = test_dfs[choice_data[0]].sample(frac=1)
+
+    
     
 
     training_phase_text.draw()
@@ -55,7 +57,8 @@ for iteration in range(1):
     if control[0] == 'space':
         
         
-        for i,row in enumerate(train_df.iloc[:1,:].iterrows(),1):
+        for i, row in enumerate(train_trial_df.iterrows(),1):
+            
             block_data = {}
             block_data['block'] = iteration + 1 
             block_data['trial'] = i
@@ -73,7 +76,6 @@ for iteration in range(1):
     
             
            
-            
             for j, image in enumerate(images,1):
                 block_data[f"S{j}"] = image
                 
@@ -101,7 +103,7 @@ for iteration in range(1):
             
             for sound_stim in sound_stims:
                 sound_stim.play()
-                core.wait(0.8)
+                core.wait(0.6)
                 
            
                 
@@ -122,7 +124,7 @@ for iteration in range(1):
 
     if control[0] == 'space':
         
-        for i,row in enumerate(test_trial_df.iloc[:1,:].iterrows(),1):
+        for i,row in enumerate(test_trial_df.iterrows(),1):
             block_data = {}
             
             block_data['block'] = iteration + 1 
@@ -151,15 +153,14 @@ for iteration in range(1):
             #block_data['Target_audio_cond2 '] = trial_data['Target_audio_cond2']
             
             
-#            target_location = trial_data['Target_Location']
-#            if target_location == 'left':
-#                foil_location = 'right' 
-#            else:
-#                foil_location = 'left'
-#                
-#            block_data['Target_Location'] = target_location
+            target_location = trial_data['target_loc']
+            if target_location == 'left':
+                foil_location = 'right' 
+            else:
+                foil_location = 'left'
+                
+            block_data['Target_Location'] = target_location
 
-            target_location = 'left'
             
             # Create image stimuli for target and foil images
             if target_location == 'left':
@@ -204,11 +205,6 @@ for iteration in range(1):
                 core.wait(0.8)
             
             
-
-            
-            
-        
-            
             start_time = core.getTime()
             keys = event.waitKeys(keyList=['left', 'right', 'escape'])
             elapsed_time = core.getTime() - start_time
@@ -229,14 +225,14 @@ for iteration in range(1):
             
         
                     
-#                
-#train_block_df = pd.DataFrame(BLOCK_DATA_TRAIN).fillna('-')
-#train_block_df.to_csv('SOURCE-CSV.csv')
-#
-#test_block_df = pd.DataFrame(BLOCK_DATA_TEST)
-#test_block_df.to_csv('Test.csv')
-#
-#
+                
+train_block_df = pd.DataFrame(BLOCK_DATA_TRAIN).fillna('-')
+train_block_df.to_csv('Train-Block-Source.csv')
+
+test_block_df = pd.DataFrame(BLOCK_DATA_TEST)
+test_block_df.to_csv('Testing-Data.csv')
+
+
 
 
     

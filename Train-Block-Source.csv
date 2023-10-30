@@ -1,0 +1,21 @@
+,block,trial,audio,S1,S2,S3
+0,1,1,"['haagle.wav', 'chelad.wav', 'pakrid.wav', 'limeber.wav', 'rakken.wav', 'jeelow.wav']",Picture1.png,Picture3.png,Picture2.png
+1,1,2,"['barget.wav', 'chelad.wav', 'dingep.wav', 'limeber.wav', 'sumbark.wav', 'jeelow.wav']",Picture8.png,Picture6.png,Picture7.png
+2,1,3,"['barget.wav', 'chelad.wav', 'goorshell.wav', 'limeber.wav', 'makkot.wav', 'jeelow.wav']",Picture8.png,Picture5.png,Picture4.png
+3,1,4,"['pakrid.wav', 'chelad.wav', 'haagle.wav', 'limeber.wav', 'bimdah.wav', 'jeelow.wav']",Picture3.png,Picture1.png,Picture10.png
+4,1,5,"['rakken.wav', 'chelad.wav', 'dingep.wav', 'limeber.wav', 'sumbark.wav', 'jeelow.wav']",Picture2.png,Picture6.png,Picture7.png
+5,1,6,"['bimdah.wav', 'chelad.wav', 'haagle.wav', 'limeber.wav', 'pakrid.wav', 'jeelow.wav']",Picture10.png,Picture1.png,Picture3.png
+6,1,7,"['sumbark.wav', 'chelad.wav', 'haagle.wav', 'limeber.wav', 'rakken.wav', 'jeelow.wav']",Picture7.png,Picture1.png,Picture2.png
+7,1,8,"['makkot.wav', 'chelad.wav', 'rakken.wav', 'limeber.wav', 'haagle.wav', 'jeelow.wav']",Picture4.png,Picture2.png,Picture1.png
+8,1,9,"['goorshell.wav', 'chelad.wav', 'makkot.wav', 'limeber.wav', 'sumbark.wav', 'jeelow.wav']",Picture5.png,Picture4.png,Picture7.png
+9,1,10,"['sumbark.wav', 'chelad.wav', 'fisslin.wav', 'limeber.wav', 'makkot.wav', 'jeelow.wav']",Picture7.png,Picture9.png,Picture4.png
+10,1,11,"['rakken.wav', 'chelad.wav', 'pakrid.wav', 'limeber.wav', 'haagle.wav', 'jeelow.wav']",Picture2.png,Picture3.png,Picture1.png
+11,1,12,"['rakken.wav', 'chelad.wav', 'makkot.wav', 'limeber.wav', 'fisslin.wav', 'jeelow.wav']",Picture2.png,Picture4.png,Picture9.png
+12,1,13,"['fisslin.wav', 'chelad.wav', 'goorshell.wav', 'limeber.wav', 'haagle.wav', 'jeelow.wav']",Picture9.png,Picture5.png,Picture1.png
+13,1,14,"['bimdah.wav', 'chelad.wav', 'haagle.wav', 'limeber.wav', 'goorshell.wav', 'jeelow.wav']",Picture10.png,Picture1.png,Picture5.png
+14,1,15,"['rakken.wav', 'chelad.wav', 'dingep.wav', 'limeber.wav', 'pakrid.wav', 'jeelow.wav']",Picture2.png,Picture6.png,Picture3.png
+15,1,16,"['rakken.wav', 'chelad.wav', 'makkot.wav', 'limeber.wav', 'pakrid.wav', 'jeelow.wav']",Picture2.png,Picture4.png,Picture3.png
+16,1,17,"['dingep.wav', 'chelad.wav', 'goorshell.wav', 'limeber.wav', 'sumbark.wav', 'jeelow.wav']",Picture6.png,Picture5.png,Picture7.png
+17,1,18,"['fisslin.wav', 'chelad.wav', 'haagle.wav', 'limeber.wav', 'bimdah.wav', 'jeelow.wav']",Picture9.png,Picture1.png,Picture10.png
+18,1,19,"['barget.wav', 'chelad.wav', 'fisslin.wav', 'limeber.wav', 'haagle.wav', 'jeelow.wav']",Picture8.png,Picture9.png,Picture1.png
+19,1,20,"['barget.wav', 'chelad.wav', 'fisslin.wav', 'limeber.wav', 'makkot.wav', 'jeelow.wav']",Picture8.png,Picture9.png,Picture4.png

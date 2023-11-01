@@ -1,0 +1,2 @@
+,block,trial,audio,Target_image,Foil_image,Target_Location,Response Time,Answer,Accuracy
+0,1,1,"['nellby.wav', 'jeelow.wav', 'chelad.wav', 'sumbark.wav', 'dingep.wav', 'pakrid.wav']","['Picture4.png', 'Picture6.png', 'Picture9.png']","['Picture4.png', 'Picture1.png', 'Picture9.png']",right,0.7367938750248868,left,0

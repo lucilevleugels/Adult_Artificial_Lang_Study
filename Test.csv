@@ -1,2 +1,0 @@
-,block,trial,audio,Target_image,Foil_image,Response Time,Answer,Accuracy
-0,1,1,"['dingep.wav', 'limeber.wav', 'makkot.wav', 'jeelow.wav', 'bimdah.wav', 'chelad.wav']","['Picture6.png', 'Picture4.png', 'Picture10.png']","['Picture6.png', 'Picture10.png', 'Picture4.png']",2.192599332993268,left,1

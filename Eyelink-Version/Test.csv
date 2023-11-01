@@ -1,2 +1,0 @@
-,block,trial,Target_image,Foil_image,Target_audio_cond1,Target_audio_cond2 ,Target_Location,Response Time,Answer,Accuracy
-0,1,4,"['Picture1.png', ' Picture2.png', ' Picture1.png']","['Picture1.png', ' Picture1.png']",ti zu bi bo ti,za,right,2.632978299865499,left,0

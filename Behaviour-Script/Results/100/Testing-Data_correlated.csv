@@ -1,2 +1,9 @@
 ,block,trial,audio,Target_image,Foil_image,Target_Location,Response Time,Answer,Accuracy
-0,1,1,"['nellby.wav', 'jeelow.wav', 'chelad.wav', 'sumbark.wav', 'dingep.wav', 'pakrid.wav']","['Picture4.png', 'Picture6.png', 'Picture9.png']","['Picture4.png', 'Picture1.png', 'Picture9.png']",right,0.7367938750248868,left,0
+0,2,1,"['nellby.wav', 'jeelow.wav', 'dingep.wav', 'haagle.wav', 'barget.wav', 'rakken.wav']","['Picture2.png', 'Picture6.png', 'Picture10.png']","['Picture2.png', 'Picture10.png', 'Picture6.png']",right,0.47323187500296626,left,0
+1,2,2,"['bimdah.wav', 'jeelow.wav', 'fisslin.wav', 'haagle.wav', 'nellby.wav', 'rakken.wav']","['Picture3.png', 'Picture4.png', 'Picture2.png']","['Picture4.png', 'Picture3.png', 'Picture2.png']",left,0.626287457998842,left,1
+2,3,1,"['nellby.wav', 'jeelow.wav', 'dingep.wav', 'haagle.wav', 'barget.wav', 'rakken.wav']","['Picture2.png', 'Picture6.png', 'Picture10.png']","['Picture2.png', 'Picture10.png', 'Picture6.png']",right,1.1238442079993547,right,1
+3,3,2,"['bimdah.wav', 'jeelow.wav', 'fisslin.wav', 'haagle.wav', 'nellby.wav', 'rakken.wav']","['Picture3.png', 'Picture4.png', 'Picture2.png']","['Picture4.png', 'Picture3.png', 'Picture2.png']",left,0.6503877499999362,right,0
+4,4,1,"['nellby.wav', 'jeelow.wav', 'dingep.wav', 'haagle.wav', 'barget.wav', 'rakken.wav']","['Picture2.png', 'Picture6.png', 'Picture10.png']","['Picture2.png', 'Picture10.png', 'Picture6.png']",right,0.6628020420030225,left,0
+5,4,2,"['bimdah.wav', 'jeelow.wav', 'fisslin.wav', 'haagle.wav', 'nellby.wav', 'rakken.wav']","['Picture3.png', 'Picture4.png', 'Picture2.png']","['Picture4.png', 'Picture3.png', 'Picture2.png']",left,3.2759848330024397,right,0
+6,5,1,"['nellby.wav', 'jeelow.wav', 'dingep.wav', 'haagle.wav', 'barget.wav', 'rakken.wav']","['Picture2.png', 'Picture6.png', 'Picture10.png']","['Picture2.png', 'Picture10.png', 'Picture6.png']",right,0.9015329999965616,left,0
+7,5,2,"['bimdah.wav', 'jeelow.wav', 'fisslin.wav', 'haagle.wav', 'nellby.wav', 'rakken.wav']","['Picture3.png', 'Picture4.png', 'Picture2.png']","['Picture4.png', 'Picture3.png', 'Picture2.png']",left,1.5392539589956868,right,0

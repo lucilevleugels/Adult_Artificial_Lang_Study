@@ -33,15 +33,26 @@ def generate_transposition_foil(items,):
     trans_foils = [[foil] for foil in cyclic_permutations[1:]]
     return trans_foils
 
+# Function to swap case markers for a given row
+def swap_case_markers(row, combination):
+    if combination == "isolated-left":
+        row['casemarker2'], row['casemarker3'] = row['casemarker3'], row['casemarker2']
+    elif combination == "isolated-center":
+        row['casemarker1'], row['casemarker3'] = row['casemarker3'], row['casemarker1']
+    elif combination == "isolated-right":
+        row['casemarker1'], row['casemarker2'] = row['casemarker2'], row['casemarker1']
+    return row
+
+
 
 def generate_training_conditions(valid_permutations, image_association):
 
     # Randomly select 20 valid permutations
-    selected_permutations = random.sample(valid_permutations, 20)
+    selected_permutations = random.sample(valid_permutations, 80)
 
     # Create the initial DataFrame
     df = pd.DataFrame({
-        'trial': range(1, 21),
+        'trial': range(1, 81),
         'item1': [p[0] for p in selected_permutations],
         'item2': [p[1] for p in selected_permutations],
         'item3': [p[2] for p in selected_permutations]
@@ -72,16 +83,8 @@ def generate_training_conditions(valid_permutations, image_association):
         # Create a new DataFrame with swapped case markers
         df_new = df.copy()
         
-        # Function to swap case markers for a given row
-        def swap_case_markers(row, combination):
-            if combination == "isolated-left":
-                row['casemarker2'], row['casemarker3'] = row['casemarker3'], row['casemarker2']
-            elif combination == "isolated-center":
-                row['casemarker1'], row['casemarker3'] = row['casemarker3'], row['casemarker1']
-            elif combination == "isolated-right":
-                row['casemarker1'], row['casemarker2'] = row['casemarker2'], row['casemarker1']
-            return row
-
+        
+        
         # Identify 50% of rows to swap in df_new
         swap_rows = random.sample(range(len(df_new)), int(len(df_new) * 0.5))
 
@@ -118,7 +121,7 @@ def generate_training_conditions(valid_permutations, image_association):
     combined_df['image_sequence'] = image_sequence
 
     print('Saving train-csv')
-    combined_df.to_csv('./Data/train_v3.csv',index=False)
+    combined_df.to_csv('./Data/train_v4.csv',index=False)
     print("Invididualising by condition")
     print("Saving files")
     for condition in combined_df['condition'].unique():
@@ -165,16 +168,7 @@ def generate_test_conditions(valid_permutations, selected_permutations, remainin
         # Create a new DataFrame with swapped case markers
         df_new = test_df.copy()
         
-        # Function to swap case markers for a given row
-        def swap_case_markers(row, combination):
-            if combination == "isolated-left":
-                row['casemarker2'], row['casemarker3'] = row['casemarker3'], row['casemarker2']
-            elif combination == "isolated-center":
-                row['casemarker1'], row['casemarker3'] = row['casemarker3'], row['casemarker1']
-            elif combination == "isolated-right":
-                row['casemarker1'], row['casemarker2'] = row['casemarker2'], row['casemarker1']
-            return row
-
+       
         # Identify 50% of rows to swap in df_new
         swap_rows = random.sample(range(len(df_new)), int(len(df_new) * 0.5))
 
@@ -308,8 +302,8 @@ def generate_test_conditions(valid_permutations, selected_permutations, remainin
     final_test_df['target_image_sequence'] = image_sequence
     
 
-    print('Saving test-csv')
-    final_test_df.to_csv('./Data/test_v3.csv',index=False)
+    print('Saving test-csv new')
+    final_test_df.to_csv('./Data/test_v5.csv',index=False)
     print("Invididualising by condition")
     print("Saving files")
     for condition in final_test_df['condition'].unique():

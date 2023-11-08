@@ -1,0 +1,25 @@
+,block,trial,audio,S1,S2,S3,repetition_found
+0,2,1,"['rakken.wav', 'chelad.wav', 'nellby.wav', 'sumbark.wav', 'dingep.wav', 'barget.wav']",Picture6.png,Picture1.png,Picture8.png,0
+1,2,2,"['dingep.wav', 'chelad.wav', 'pakrid.wav', 'sumbark.wav', 'bimdah.wav', 'barget.wav']",Picture8.png,Picture5.png,Picture9.png,0
+2,2,3,"['pakrid.wav', 'chelad.wav', 'dingep.wav', 'sumbark.wav', 'fisslin.wav', 'barget.wav']",Picture5.png,Picture8.png,Picture10.png,0
+3,2,3,"['pakrid.wav', 'chelad.wav', 'dingep.wav', 'sumbark.wav', 'fisslin.wav', 'barget.wav']",Picture5.png,Picture8.png,Picture10.png,1
+4,2,4,"['rakken.wav', 'chelad.wav', 'bimdah.wav', 'sumbark.wav', 'pakrid.wav', 'barget.wav']",Picture6.png,Picture9.png,Picture5.png,0
+5,2,5,"['haagle.wav', 'chelad.wav', 'fisslin.wav', 'sumbark.wav', 'nellby.wav', 'barget.wav']",Picture4.png,Picture10.png,Picture1.png,0
+6,3,21,"['pakrid.wav', 'chelad.wav', 'fisslin.wav', 'sumbark.wav', 'jeelow.wav', 'barget.wav']",Picture5.png,Picture10.png,Picture2.png,0
+7,3,22,"['dingep.wav', 'chelad.wav', 'fisslin.wav', 'sumbark.wav', 'limeber.wav', 'barget.wav']",Picture8.png,Picture10.png,Picture7.png,0
+8,3,23,"['goorshell.wav', 'chelad.wav', 'dingep.wav', 'sumbark.wav', 'bimdah.wav', 'barget.wav']",Picture3.png,Picture8.png,Picture9.png,0
+9,3,24,"['goorshell.wav', 'chelad.wav', 'rakken.wav', 'sumbark.wav', 'limeber.wav', 'barget.wav']",Picture3.png,Picture6.png,Picture7.png,0
+10,3,25,"['goorshell.wav', 'chelad.wav', 'bimdah.wav', 'sumbark.wav', 'jeelow.wav', 'barget.wav']",Picture3.png,Picture9.png,Picture2.png,0
+11,3,26,"['pakrid.wav', 'chelad.wav', 'limeber.wav', 'sumbark.wav', 'bimdah.wav', 'barget.wav']",Picture5.png,Picture7.png,Picture9.png,0
+12,4,41,"['nellby.wav', 'chelad.wav', 'jeelow.wav', 'sumbark.wav', 'bimdah.wav', 'barget.wav']",Picture1.png,Picture2.png,Picture9.png,0
+13,4,42,"['haagle.wav', 'chelad.wav', 'pakrid.wav', 'sumbark.wav', 'dingep.wav', 'barget.wav']",Picture4.png,Picture5.png,Picture8.png,0
+14,4,42,"['haagle.wav', 'chelad.wav', 'pakrid.wav', 'sumbark.wav', 'dingep.wav', 'barget.wav']",Picture4.png,Picture5.png,Picture8.png,0
+15,4,43,"['rakken.wav', 'chelad.wav', 'dingep.wav', 'sumbark.wav', 'nellby.wav', 'barget.wav']",Picture6.png,Picture8.png,Picture1.png,0
+16,4,44,"['pakrid.wav', 'chelad.wav', 'limeber.wav', 'sumbark.wav', 'dingep.wav', 'barget.wav']",Picture5.png,Picture7.png,Picture8.png,0
+17,4,45,"['bimdah.wav', 'chelad.wav', 'dingep.wav', 'sumbark.wav', 'pakrid.wav', 'barget.wav']",Picture9.png,Picture8.png,Picture5.png,0
+18,5,61,"['goorshell.wav', 'chelad.wav', 'bimdah.wav', 'sumbark.wav', 'pakrid.wav', 'barget.wav']",Picture3.png,Picture9.png,Picture5.png,0
+19,5,62,"['rakken.wav', 'chelad.wav', 'nellby.wav', 'sumbark.wav', 'pakrid.wav', 'barget.wav']",Picture6.png,Picture1.png,Picture5.png,0
+20,5,63,"['pakrid.wav', 'chelad.wav', 'nellby.wav', 'sumbark.wav', 'bimdah.wav', 'barget.wav']",Picture5.png,Picture1.png,Picture9.png,0
+21,5,64,"['rakken.wav', 'chelad.wav', 'limeber.wav', 'sumbark.wav', 'jeelow.wav', 'barget.wav']",Picture6.png,Picture7.png,Picture2.png,0
+22,5,65,"['dingep.wav', 'chelad.wav', 'rakken.wav', 'sumbark.wav', 'jeelow.wav', 'barget.wav']",Picture8.png,Picture6.png,Picture2.png,0
+23,5,66,"['jeelow.wav', 'chelad.wav', 'bimdah.wav', 'sumbark.wav', 'nellby.wav', 'barget.wav']",Picture2.png,Picture9.png,Picture1.png,0

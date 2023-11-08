@@ -13,9 +13,6 @@ mon = monitors.Monitor('testMonitor')
 BLOCK_DATA_TEST = []
 BLOCK_DATA_TRAIN = []
 
-# TEST FLAG
-TEST_FLAG = False 
-
 # PATHS 
 DATA_TRAIN_PATH = "../Data"
 DATA_TEST_PATH = "../Data"
@@ -28,18 +25,33 @@ RESULTS = "./Results"
 
 # PARAMETERS 
 AUDIO_DELAY = 0.75
-TRAIN_IMAGE_DELAY = 2.5
+
+# TEST FLAG
+TEST_FLAG = False  
+TEST_TRIALS = 2
+
+# IMAGE PARAMS
+IMAGE_DIMS = (120, 121)
 
 # FOR DELL 27 INCH
 # Screen resolution
 SCN_W, SCN_H = (3825,2010)
 
 
-
-
-def training_block(win, training_phase_text, space_bar, train_trial_df, choice_data, iteration):
+def create_repetitions(repetition, df):
     
+    row_copy = df.iloc[repetition-1,:]
+    row_copy = pd.DataFrame(row_copy).T
 
+    before_r = df.iloc[:repetition, :]
+    after_r = df.iloc[repetition:, :]
+        
+    return pd.concat([before_r, row_copy, after_r],axis=0)
+
+def training_block(win, training_phase_text, space_bar, train_block, choice_data, iteration):
+    
+    # REPETITION PARAMS
+    repetition_params = {1: (3,11,16), 2:(6,15,19), 3:(2,10,18), 4:(9,14,20)}
     
     temp_train_block_data = []
     
@@ -53,28 +65,30 @@ def training_block(win, training_phase_text, space_bar, train_trial_df, choice_d
     
     if control[0] == 'space':
         
+        global TEST_FLAG
+        
         # FOR TESTING THE SCRIPT 
-        global TEST_FLAG 
         if TEST_FLAG:
-            train_trial_df = train_trial_df.iloc[:1,:]
+            train_block = train_block.iloc[:TEST_TRIALS,:]
         else:
-            train_trial_df = train_trial_df
+            train_block = train_block
+        
+        
+        
+        for i, row in enumerate(train_block.iterrows(),1):
             
-            
-        for i, row in enumerate(train_test_df.iterrows(),1):
+            trial_data = row[1]
             
             block_data = {}
             block_data['block'] = iteration + 1 
-            block_data['trial'] = i
+            block_data['trial'] = trial_data['trial']
             
-            
-            trial_data = row[1]
             
             audio_items = eval(trial_data['audio_sequence'])
             images = eval(trial_data['image_sequence'])
                 
             audio_paths = [os.path.join(AUDIO_PATH, item) for item in audio_items]
-            #sound_stims = [sound.Sound(audio_path) for audio_path in audio_paths]
+            sound_stims = [sound.Sound(audio_path) for audio_path in audio_paths]
 
             block_data['audio'] = audio_items
     
@@ -95,7 +109,7 @@ def training_block(win, training_phase_text, space_bar, train_trial_df, choice_d
             for image_name, i in zip(images, range(num_images)):
                 image_path = os.path.join(IMAGE_PATH, image_name.strip())
                 x = start_x + i * spacing
-                image_stim = visual.ImageStim(win, image=image_path, pos=(x, 0), size=(120, 121))
+                image_stim = visual.ImageStim(win, image=image_path, pos=(x, 0), size=IMAGE_DIMS)
                 image_stims.append(image_stim)
             
             
@@ -107,30 +121,38 @@ def training_block(win, training_phase_text, space_bar, train_trial_df, choice_d
             tk.sendMessage(f'Image Stimulus Presentation End')
                 
            
-    
+            
             tk.sendMessage(f'!V TRIAL_VAR Audio-Train {audio_items}')
             
             # for testing 
             for audio in audio_items:
                 tk.sendMessage(f'Sound {audio} On_set')
+                
             
             for sound_stim,audio in zip(sound_stims,audio_items):
                 tk.sendMessage(f'Sound {audio} On_set')
-                #sound_stim.play()
+                sound_stim.play()
                 core.wait(AUDIO_DELAY)
             tk.sendMessage(f'Sound stimulus presentation  -- End')
                 
            
-            
-            
-            temp_train_block_data.append(block_data)
-            
-            
+        
             # space bar screen
             space_bar.draw()
             win.flip()
-            keys = event.waitKeys(keyList=['space']) 
+            keys = event.waitKeys(keyList=['space', 'down'])
+           
+            if keys[0] == 'down':
+                
+                block_data['repetition_found'] = 1
+                tk.sendMessage(f'!V TRIAL_VAR Repetition-Found 1')
+                
+            else:
+                tk.sendMessage(f'!V TRIAL_VAR Repetition-Found 0')
+                block_data['repetition_found'] = 0
             
+            
+            temp_train_block_data.append(block_data)
             
             
     
@@ -155,20 +177,14 @@ def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data
 
     if control[0] == 'space':
         
-        global TEST_FLAG 
-        if TEST_FLAG:
-            test_trial_df = test_trial_df.iloc[:1,:]
-        else:
-            test_trial_df = test_trial_df
-        
-        for i,row in enumerate(test_trial_df.iterrows(),1):
+        for i,row in enumerate(test_trial_df.iloc[:1,:].iterrows(),1):
             block_data = {}
             
-            block_data['block'] = iteration + 1 
+            block_data['block'] = iteration
             block_data['trial'] = i
             
             trial_data = row[1]
-            #print(trial_data)
+
             
             audio_items = eval(trial_data['target_audio_sequence'])
             audio_paths = [os.path.join(AUDIO_PATH, item) for item in audio_items]
@@ -183,9 +199,7 @@ def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data
             
             block_data['Target_image'] = target_images
             block_data['Foil_image'] = foil_images
-        
-            #block_data['Target_audio_cond1'] = trial_data['Target_audio_cond1']
-            #block_data['Target_audio_cond2 '] = trial_data['Target_audio_cond2']
+    
             
             
             target_location = trial_data['target_loc']
@@ -199,16 +213,15 @@ def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data
             
             # Create image stimuli for target and foil images
             if target_location == 'left':
-                target_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(120, 121)) for img in target_images]
-                foil_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(120, 121)) for img in foil_images]
+                target_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=IMAGE_DIMS) for img in target_images]
+                foil_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=IMAGE_DIMS) for img in foil_images]
             else:
-                target_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(120, 121)) for img in target_images]
-                foil_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(120, 121)) for img in foil_images]
+                target_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=IMAGE_DIMS) for img in target_images]
+                foil_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=IMAGE_DIMS) for img in foil_images]
                 
                 target_stimuli, foil_stimuli = foil_stimuli, target_stimuli
                 
-                
-
+            
 
             # Calculate the positions for target and foil stimuli
             y_position = 0  # Adjust as needed
@@ -244,10 +257,10 @@ def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data
             # for testing 
             for audio in audio_items:
                 tk.sendMessage(f'Sound {audio} On_set')
-#            for sound_stim, audio in zip(sound_stims, audio_items):
-#                tk.sendMessage(f'Sound {audio} On_set')
-#                #sound_stim.play()
-#                core.wait(AUDIO_DELAY)
+            for sound_stim, audio in zip(sound_stims, audio_items):
+                tk.sendMessage(f'Sound {audio} On_set')
+                sound_stim.play()
+                core.wait(AUDIO_DELAY)
             tk.sendMessage(f'Sound stimulus presentation  -- End')
             
             start_time = core.getTime()
@@ -264,7 +277,6 @@ def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data
             block_data['Accuracy'] = 1 if answer == target_location else 0
             tk.sendMessage(f'!V TRIAL_VAR Keypress {answer}')
             
-
             
             if 'escape' in keys:
                 break
@@ -311,11 +323,8 @@ choice_data = choice_dialog.show()
 
 
 # TRIAL CSV's
-
 train_df = pd.read_csv(os.path.join(DATA_TRAIN_PATH, "train_v4.csv"))
 test_df = pd.read_csv(os.path.join(DATA_TEST_PATH, "test_v4.csv"))
-
-
 
 
 # df by condition
@@ -374,22 +383,40 @@ win.flip()
 tk.doTrackerSetup()
 
 
-# Run 3 trials in a for-loop
+
+# selecting train set based on the condition 
+train_trial_df = train_dfs[choice_data[0]]
+test_trial_df = test_dfs[choice_data[0]]
+
+# adding block index
+ones = [1]*20
+twos = [2]*20
+threes = [3]*20
+fours = [4]*20
+
+block_index = ones + twos + threes + fours
+train_trial_df['block_index'] = block_index
+
+
+
 # in each trial, first show a fixation dot, wait for the participant # to gaze at the fixation dot, then present an image for 2 secs
-for i in range(1):
-
+for i in range(1,5):
     
-     # Shuffle
-    train_trial_df = train_dfs[choice_data[0]].sample(frac=1)
-    test_trial_df = test_dfs[choice_data[0]].sample(frac=1)
-
-
     
+    print(f"BLOCK {iteration}")
+    
+    train_block = train_trial_df[train_trial_df['block_index'] == iteration]
+    repetitions = repetition_params[iteration]
+   
+    for i, repetition in enumerate(repetitions, 0):
+        train_block = create_repetitions(repetition+i, train_block.reset_index(drop=True))
    
    # Prepare the fixation dot in memory
     fix = visual.GratingStim(win, tex='None', mask='circle', size=50, pos=(0,400), color='black')
 
-
+    
+    # PROGRESS BAR 
+    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.jpg"),pos=(0,0))
 
     # Put tracker in Offline mode before we start recording
     tk.setOfflineMode()
@@ -446,11 +473,18 @@ for i in range(1):
 
     tk.sendMessage(f'!V TRIAL_VAR Train-Block {i}')
     tk.sendMessage(f'Train-Block {i}')
-    train_block_data = training_block(win, training_phase_text, space_bar, train_trial_df, choice_data, i)
+    train_block_data = training_block(win, training_phase_text, space_bar, train_block, choice_data, i)
     # can introduce some kind of delay here in between
+
+    
+    
     tk.sendMessage(f'!V TRIAL_VAR Test-Block {i}')
     tk.sendMessage(f'Test-Block {i}')
     test_block_data  = testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data, i)
+    
+    bar.draw()
+    win.flip()
+    control = event.waitKeys(keyList=['space'])
     
     BLOCK_DATA_TRAIN.append(train_block_data)
     BLOCK_DATA_TEST.append(test_block_data)
@@ -460,6 +494,8 @@ for i in range(1):
     # Clear the screen
     win.flip()
     core.wait(0.5)
+    
+    
     
 # Stop recording
 tk.stopRecording()

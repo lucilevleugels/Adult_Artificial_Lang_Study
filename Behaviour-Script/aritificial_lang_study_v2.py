@@ -2,6 +2,8 @@ from psychopy import visual, core, sound, event, gui, data
 import os, csv
 import pandas as pd 
 import datetime
+import warnings
+warnings.filterwarnings('ignore')
 
 # PATHS 
 DATA_TRAIN_PATH = "../Data"
@@ -13,9 +15,26 @@ PROGESS_IMAGE_PATH = "../progress_bar_images"
 
 RESULTS = "./Results"
 
+# TEST FLAG
+TEST_FLAG = True  
+TEST_TRIALS = 6
+
 # PARAMETERS
 AUDIO_DELAY = 0.75
 
+# REPETITION PARAMS
+repetition_params = {1: (3,11,16), 2:(6,15,19), 3:(2,10,18), 4:(9,14,20)}
+
+
+def create_repetitions(repetition, df):
+    
+    row_copy = df.iloc[repetition-1,:]
+    row_copy = pd.DataFrame(row_copy).T
+
+    before_r = df.iloc[:repetition, :]
+    after_r = df.iloc[repetition:, :]
+        
+    return pd.concat([before_r, row_copy, after_r],axis=0)
 
 
 file_name = '100'
@@ -54,13 +73,15 @@ choice_data = choice_dialog.show()
 
 
 
-SCN_W, SCN_H = (1280, 800)
+
+
+#SCN_W, SCN_H = (1280, 800)
 # Open a PsyhocPy window with the "allowStencil" option 
 win = visual.Window(fullscr=True, units='pix', allowStencil=True, color=(1,1,1))
 
 
-train_df = pd.read_csv(os.path.join(DATA_TRAIN_PATH, "train_v3.csv"))
-test_df = pd.read_csv(os.path.join(DATA_TEST_PATH, "test_v3.csv"))
+train_df = pd.read_csv(os.path.join(DATA_TRAIN_PATH, "train_v4.csv"))
+test_df = pd.read_csv(os.path.join(DATA_TEST_PATH, "test_v4.csv"))
 
 
 
@@ -75,30 +96,43 @@ for condition in test_df['condition'].unique():
 
 
 
-space_bar_text = '''PRESS 
-
-SPACE-BAR 
-
-TO CONTINUE'''
+space_bar_text = '''PRESS SPACE-BAR TO CONTINUE'''
 
 training_phase_text = visual.TextStim(win, text="Training Phase", height=40, color=(-1, -1, -1), pos=(0,0))
 space_bar = visual.TextStim(win, text=space_bar_text, height=50, color='black', pos=(0,0))
 testing_phase_text = visual.TextStim(win, text="Testing Phase", height=40 , color=(-1, -1, -1), pos=(0,0))
 
 #BLOCK DICTIONARY
-
 BLOCK_DATA_TRAIN = []
 BLOCK_DATA_TEST = []
 
-for iteration in range(1):
-    
-    
-    train_trial_df = train_dfs[choice_data[0]].sample(frac=1)
-    test_trial_df = test_dfs[choice_data[0]].sample(frac=1)
 
-    
-    
+# selecting train set based on the condition 
+train_trial_df = train_dfs[choice_data[0]]
+test_trial_df = test_dfs[choice_data[0]]
 
+# adding block index
+ones = [1]*20
+twos = [2]*20
+threes = [3]*20
+fours = [4]*20
+
+block_index = ones + twos + threes + fours
+train_trial_df['block_index'] = block_index
+
+for iteration in range(1,5):
+    
+    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.jpg"),pos=(0,0), size=(800,800))
+    
+    print(f"BLOCK {iteration}")
+    
+    train_block = train_trial_df[train_trial_df['block_index'] == iteration]
+    repetitions = repetition_params[iteration]
+   
+    for i, repetition in enumerate(repetitions, 0):
+        train_block = create_repetitions(repetition+i, train_block.reset_index(drop=True))
+        
+    
     training_phase_text.draw()
     win.flip()
     core.wait(1)
@@ -108,14 +142,19 @@ for iteration in range(1):
     control = event.waitKeys(keyList=['space'])
     if control[0] == 'space':
         
-        for i, row in enumerate(train_trial_df.iloc[:1,:].iterrows(),1):
-            
-            block_data = {}
-            block_data['block'] = iteration + 1 
-            block_data['trial'] = i
-            
+        # FOR TESTING THE SCRIPT 
+        if TEST_FLAG:
+            train_block = train_block.iloc[:TEST_TRIALS,:]
+        else:
+            train_block = train_block
+        
+        for i, row in enumerate(train_block.iterrows(),1):
             
             trial_data = row[1]
+            
+            block_data = {}
+            block_data['block'] = iteration
+            block_data['trial'] = trial_data['trial']
             
             audio_items = eval(trial_data['audio_sequence'])
             images = eval(trial_data['image_sequence'])
@@ -150,7 +189,6 @@ for iteration in range(1):
             for image_stim in image_stims:
                 image_stim.draw()
 
-            print("--")
                 
             win.flip()
             
@@ -161,12 +199,19 @@ for iteration in range(1):
            
                 
             
-            BLOCK_DATA_TRAIN.append(block_data)
-            
             space_bar.draw()
             win.flip()
-            keys = event.waitKeys(keyList=['space']) 
+            keys = event.waitKeys(keyList=['space', 'down'])
+
+            if keys[0] == 'down':
+                
+                block_data['repetition_found'] = 1
+                
+            else:
+                block_data['repetition_found'] = 0
             
+            
+            BLOCK_DATA_TRAIN.append(block_data)
             
 
     
@@ -186,13 +231,21 @@ for iteration in range(1):
     
 
     if control[0] == 'space':
-        for i,row in enumerate(test_trial_df.iloc[:1,:].iterrows(),1):
+        
+        if TEST_FLAG:
+            test_trial_df = test_trial_df.iloc[:TEST_TRIALS,:]
+        else:
+            test_trial_df = test_trial_df
+        
+        for i,row in enumerate(test_trial_df.iterrows(),1):
             block_data = {}
             
-            block_data['block'] = iteration + 1 
-            block_data['trial'] = i
-            
             trial_data = row[1]
+            
+            block_data['block'] = iteration
+            block_data['trial'] = trial_data['trial']
+            
+            
             #print(trial_data)
             
             
@@ -210,9 +263,7 @@ for iteration in range(1):
             
             block_data['Target_image'] = target_images
             block_data['Foil_image'] = foil_images
-        
-            #block_data['Target_audio_cond1'] = trial_data['Target_audio_cond1']
-            #block_data['Target_audio_cond2 '] = trial_data['Target_audio_cond2']
+    
             
             
             target_location = trial_data['target_loc']
@@ -254,11 +305,9 @@ for iteration in range(1):
                 foil.pos = (foil_x, y_position)
 
             # Display all target stimuli and foil stimuli
-            print("testing")
+
             for target in target_stimuli:
                 target.draw()
-                print(target.pos)
-                print("--")
             for foil in foil_stimuli:
                 foil.draw()
                 
@@ -291,7 +340,10 @@ for iteration in range(1):
             control = event.waitKeys(keyList=['space'])
                 
             
-            
+           
+    bar.draw()
+    win.flip()
+    control = event.waitKeys(keyList=['space'])
         
                     
 train_block_df = pd.DataFrame(BLOCK_DATA_TRAIN).fillna('-')

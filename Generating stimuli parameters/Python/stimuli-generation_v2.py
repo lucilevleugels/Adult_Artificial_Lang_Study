@@ -7,12 +7,11 @@ import warnings
 import random
 import numpy as np
 from itertools import permutations
+import sys
 
 warnings.filterwarnings('ignore')
 
 
-# Set seed for reproducibility
-np.random.seed(123)
 
 # create train and test directories 
 os.makedirs('./Train/', exist_ok=True)
@@ -34,10 +33,11 @@ def generate_transposition_foil(items,):
     return trans_foils
 
 
-def generate_training_conditions(valid_permutations, image_association):
+def generate_training_conditions(valid_permutations, image_association, random_seed):
 
     # Randomly select 20 valid permutations
     selected_permutations = random.sample(valid_permutations, 20)
+    used_items = [item for perm in selected_permutations for item in perm]
 
     # Create the initial DataFrame
     df = pd.DataFrame({
@@ -117,18 +117,20 @@ def generate_training_conditions(valid_permutations, image_association):
 
     combined_df['image_sequence'] = image_sequence
 
-    print('Saving train-csv')
-    combined_df.to_csv('./Train/train_v3.csv',index=False)
-    print("Invididualising by condition")
-    print("Saving files")
-    for condition in combined_df['condition'].unique():
-        print(f"- {condition}")
-        combined_df[combined_df['condition']==condition].to_csv(f'./Train/{condition}_train.csv',index=False)
+    # print('Saving train-csv')
+    # combined_df.to_csv(f'./Train/train_{random_seed}.csv',index=False)
+ 
 
-    return selected_permutations, remaining_items
+    # print("Invididualising by condition")
+    # print("Saving files")
+    # for condition in combined_df['condition'].unique():
+    #     print(f"- {condition}")
+    #     combined_df[combined_df['condition']==condition].to_csv(f'./Train/{condition}_train.csv',index=False)
+
+    return selected_permutations, remaining_items, combined_df
 
 
-def generate_test_conditions(valid_permutations, selected_permutations, remaining_items, image_association):
+def generate_test_conditions(valid_permutations, selected_permutations, remaining_items, image_association, random_seed):
 
     # Randomly select 48 permutations from the remaining 20
     test_permutations = random.sample(list(set(valid_permutations) - set(selected_permutations)),48)
@@ -308,49 +310,125 @@ def generate_test_conditions(valid_permutations, selected_permutations, remainin
     final_test_df['target_image_sequence'] = image_sequence
     
 
-    print('Saving test-csv')
-    final_test_df.to_csv('./Test/test_v3.csv',index=False)
-    print("Invididualising by condition")
-    print("Saving files")
-    for condition in final_test_df['condition'].unique():
-        print(f"- {condition}")
-        final_test_df[final_test_df['condition']==condition].to_csv(f'./Test/{condition}_test.csv',index=False)
+    # print('Saving test-csv')
+    # final_test_df.to_csv(f'./Test/test_{random_seed}.csv',index=False)
+
+    return final_test_df
+
+
+    # print("Invididualising by condition")
+    # print("Saving files")
+    # for condition in final_test_df['condition'].unique():
+    #     print(f"- {condition}")
+    #     final_test_df[final_test_df['condition']==condition].to_csv(f'./Test/{condition}_test.csv',index=False)
 
 
 
 
 if __name__ == '__main__':
-    # Define the pool of syllabus items
-    syllabus_pool = ["barget", "bimdah", "chelad", "dingep", "fisslin", "goorshell",
-                    "haagle", "jeelow", "limeber", "makkot", "nellby", "pakrid",
-                    "rakken", "sumbark"]
 
-    # Randomly select 10 items from the pool
-    selected_items = random.sample(syllabus_pool, 10)
 
-    images = os.listdir('../../Images')
-    # .DS_Store
-    try:
-        images.remove('.DS_Store')
-    except:
-        pass
 
-    image_association = {}
-    for image, item in zip(images, selected_items):
-        image_association[item] = image
+    args = sys.argv
+
+    if len(sys.argv) == 1:
+        print("No Arguments detected, enter the number of blocks to be generated. ")
+        try:
+            input = int(input("Enter the Number of Blocks: "))
+        except:
+            print("Invalid Input, defaulting it to 4 Blocks. ")
+            blocks = 4
         
+    else:
+        blocks = sys.argv[1]
+        try:
+            blocks = int(blocks) 
+        except ValueError:
+            print("Commandline Argument should be an Integer value for the number of Blocks.")
+            print("Defaulting it to 4 Blocks. ")
+            blocks = 4
 
 
-    # Generate all possible permutations of the selected items
-    all_permutations = list(permutations(selected_items, 3))
 
-    # Filter out invalid permutations (those with repeated items)
-    valid_permutations = [p for p in all_permutations if len(set(p)) == len(p)]
+    random_seeds = np.random.choice(range(100, 1000), size=blocks, replace=False)
+
+    train_seed_dfs = {}
+    test_seed_dfs = {}
 
 
-    selected_permutations, remaining_items = generate_training_conditions(valid_permutations, image_association)
-    print("--"*25)
-    generate_test_conditions(valid_permutations, selected_permutations, remaining_items, image_association)
+    for random_seed in random_seeds:
+
+        print(f"USING RANDOM SEED {random_seed}")
+        print("---"*25)
+
+
+        # Set seed for reproducibility
+        np.random.seed(random_seed)
+
+
+        # Define the pool of syllabus items
+        syllabus_pool = ["barget", "bimdah", "chelad", "dingep", "fisslin", "goorshell",
+                        "haagle", "jeelow", "limeber", "makkot", "nellby", "pakrid",
+                        "rakken", "sumbark"]
+
+        # Randomly select 10 items from the pool
+        selected_items = random.sample(syllabus_pool, 10)
+
+        images = os.listdir('../../Images')
+        # .DS_Store
+        try:
+            images.remove('.DS_Store')
+        except:
+            pass
+
+        image_association = {}
+        for image, item in zip(images, selected_items):
+            image_association[item] = image
+            
+
+
+        # Generate all possible permutations of the selected items
+        all_permutations = list(permutations(selected_items, 3))
+
+        # Filter out invalid permutations (those with repeated items)
+        valid_permutations = [p for p in all_permutations if len(set(p)) == len(p)]
+
+
+        selected_permutations, remaining_items, train_df = generate_training_conditions(valid_permutations, image_association, random_seed)
+
+        # print("--"*25)
+
+        test_df = generate_test_conditions(valid_permutations, selected_permutations, remaining_items, image_association, random_seed)
+
+        train_seed_dfs[random_seed] = train_df
+        test_seed_dfs[random_seed] = test_df
+
+
+
+    # concatenating 
+    pd.concat(train_seed_dfs.values(), axis=0).to_csv(f'./Train/train_df.csv',index=False)
+    pd.concat(test_seed_dfs.values(), axis=0).to_csv(f'./Test/test_df.csv',index=False)
+
+    with open("./Train/seeds.txt", 'w') as f:
+        seeds = 'Seeds ='
+        for seed in random_seeds:
+            seeds += ' '+str(seed)
+        f.write(seeds)
+
+    with open("./Test/seeds.txt", 'w') as f:
+        seeds = 'Seeds ='
+        for seed in random_seeds:
+            seeds += ' '+str(seed)
+        f.write(seeds)
+
+    print("Train and Test Sets are Saved!")
+
+
+
+
+
+
+
 
 
 print('-'*25)

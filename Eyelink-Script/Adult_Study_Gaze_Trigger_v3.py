@@ -24,14 +24,14 @@ PROGESS_IMAGE_PATH = "../progress_bar_images"
 RESULTS = "./Results"
 
 # PARAMETERS 
-AUDIO_DELAY = 0.75
+AUDIO_DELAY = 0.9
 
 # TEST FLAG
 TEST_FLAG = False  
-TEST_TRIALS = 2
+TEST_TRIALS = 1
 
 # IMAGE PARAMS
-IMAGE_DIMS = (120, 121)
+IMAGE_DIMS = (350 , 351)
 
 # FOR DELL 27 INCH
 # Screen resolution
@@ -52,6 +52,8 @@ def training_block(win, training_phase_text, space_bar, train_block, choice_data
     
     # REPETITION PARAMS
     repetition_params = {1: (3,11,16), 2:(6,15,19), 3:(2,10,18), 4:(9,14,20)}
+    
+    good_job = visual.TextStim(win, text="Good Job!, you found the repetition!", height=70, color=(-1, -1, -1), pos=(0,0))
     
     temp_train_block_data = []
     
@@ -80,7 +82,7 @@ def training_block(win, training_phase_text, space_bar, train_block, choice_data
             trial_data = row[1]
             
             block_data = {}
-            block_data['block'] = iteration + 1 
+            block_data['block'] = iteration 
             block_data['trial'] = trial_data['trial']
             
             
@@ -99,7 +101,7 @@ def training_block(win, training_phase_text, space_bar, train_block, choice_data
                 
             
             num_images = len(images)
-            spacing = 170  # Adjust the spacing between images as needed
+            spacing = 300  # Adjust the spacing between images as needed
             total_width = (num_images - 1) * spacing
             start_x = -total_width / 2
             
@@ -120,7 +122,6 @@ def training_block(win, training_phase_text, space_bar, train_block, choice_data
             win.flip()
             tk.sendMessage(f'Image Stimulus Presentation End')
                 
-           
             
             tk.sendMessage(f'!V TRIAL_VAR Audio-Train {audio_items}')
             
@@ -146,6 +147,10 @@ def training_block(win, training_phase_text, space_bar, train_block, choice_data
                 
                 block_data['repetition_found'] = 1
                 tk.sendMessage(f'!V TRIAL_VAR Repetition-Found 1')
+                good_job = visual.TextStim(win, text="Good Job!, you found the repetition!", height=70, color=(-1, -1, -1), pos=(0,0))
+                good_job.draw()
+                win.flip()
+                core.wait(1)
                 
             else:
                 tk.sendMessage(f'!V TRIAL_VAR Repetition-Found 0')
@@ -177,13 +182,21 @@ def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data
 
     if control[0] == 'space':
         
-        for i,row in enumerate(test_trial_df.iloc[:1,:].iterrows(),1):
+        # FOR TESTING THE SCRIPT 
+        if TEST_FLAG:
+            test_trial_df = test_trial_df.iloc[:TEST_TRIALS,:]
+        else:
+            test_trial_df = test_trial_df
+        
+        for i,row in enumerate(test_trial_df.iterrows(),1):
             block_data = {}
             
-            block_data['block'] = iteration
-            block_data['trial'] = i
             
             trial_data = row[1]
+            block_data['block'] = iteration
+            block_data['trial'] = trial_data['trial']
+            
+           
 
             
             audio_items = eval(trial_data['target_audio_sequence'])
@@ -227,15 +240,15 @@ def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data
             y_position = 0  # Adjust as needed
 
             # Set horizontal positions for target stimuli on the left
-            x_offset_target = -500  # Adjust as needed
-            spacing_target = 120  # Adjust the horizontal spacing as needed
+            x_offset_target = -1300  # Adjust as needed
+            spacing_target = 300  # Adjust the horizontal spacing as needed
             for i, target in enumerate(target_stimuli):
                 target_x = x_offset_target + (i * spacing_target)
                 target.pos = (target_x, y_position)
 
             # Set horizontal positions for foil stimuli on the right
-            x_offset_foil = 300  # Adjust as needed
-            spacing_foil = 120  # Adjust the horizontal spacing as needed
+            x_offset_foil = 700  # Adjust as needed
+            spacing_foil = 300  # Adjust the horizontal spacing as needed
             for i, foil in enumerate(foil_stimuli):
                 foil_x = x_offset_foil + (i * spacing_foil)
                 foil.pos = (foil_x, y_position)
@@ -357,11 +370,12 @@ win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix', color='white')
 #win = visual.Window(fullscr=True, units='pix', color='white')
 
 # INFORMATION 
-space_bar_text = '''PRESS  SPACE-BAR  TO CONTINUE'''
+space_bar_text = '''Press Spacebar to Continue'''
 
-training_phase_text = visual.TextStim(win, text="Training Phase", height=40, color=(-1, -1, -1), pos=(0,0))
-space_bar = visual.TextStim(win, text=space_bar_text, height=50, color='black', pos=(0,0))
-testing_phase_text = visual.TextStim(win, text="Testing Phase", height=40 , color=(-1, -1, -1), pos=(0,0))
+training_phase_text = visual.TextStim(win, text="Training Phase", height=70, color=(-1, -1, -1), pos=(0,0))
+
+space_bar = visual.TextStim(win, text=space_bar_text, height=70, color='black', pos=(0,0))
+testing_phase_text = visual.TextStim(win, text="Testing Phase", height=70 , color=(-1, -1, -1), pos=(0,0))
 
 
 
@@ -377,7 +391,7 @@ genv.setCalibrationSounds('off','off', 'off')
 pylink.openGraphicsEx(genv)
 
 # Calibrate the tracker
-calib_msg = visual.TextStim(win, text='Press ENTER twice to calibrate',height=50, color='black') 
+calib_msg = visual.TextStim(win, text='Press calibrate for calibration',height=50, color='black') 
 calib_msg.draw()
 win.flip()
 tk.doTrackerSetup()
@@ -397,10 +411,11 @@ fours = [4]*20
 block_index = ones + twos + threes + fours
 train_trial_df['block_index'] = block_index
 
+repetition_params = {1: (3,11,16), 2:(6,15,19), 3:(2,10,18), 4:(9,14,20)}
 
 
 # in each trial, first show a fixation dot, wait for the participant # to gaze at the fixation dot, then present an image for 2 secs
-for i in range(1,5):
+for iteration in range(1,5):
     
     
     print(f"BLOCK {iteration}")
@@ -471,16 +486,16 @@ for i in range(1,5):
    
    
 
-    tk.sendMessage(f'!V TRIAL_VAR Train-Block {i}')
-    tk.sendMessage(f'Train-Block {i}')
-    train_block_data = training_block(win, training_phase_text, space_bar, train_block, choice_data, i)
+    tk.sendMessage(f'!V TRIAL_VAR Train-Block {iteration}')
+    tk.sendMessage(f'Train-Block {iteration}')
+    train_block_data = training_block(win, training_phase_text, space_bar, train_block, choice_data, iteration)
     # can introduce some kind of delay here in between
 
     
     
-    tk.sendMessage(f'!V TRIAL_VAR Test-Block {i}')
-    tk.sendMessage(f'Test-Block {i}')
-    test_block_data  = testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data, i)
+    tk.sendMessage(f'!V TRIAL_VAR Test-Block {iteration}')
+    tk.sendMessage(f'Test-Block {iteration}')
+    test_block_data  = testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data, iteration)
     
     bar.draw()
     win.flip()
@@ -510,19 +525,19 @@ for block in BLOCK_DATA_TRAIN:
     dfs.append(pd.DataFrame(block))
     
 train_block_df = pd.concat(dfs,axis=0).fillna('-')
-train_block_df.to_csv(f'Train-Block-Source_{choice_data[0]}.csv') 
+train_block_df.to_csv(f'Train-Block-Source_{choice_data[0]}_{file_name}.csv') 
 
 dfs = []
 for block in BLOCK_DATA_TEST:
     dfs.append(pd.DataFrame(block))
 
 test_block_df = pd.concat(dfs,axis=0)
-test_block_df.to_csv(f'Train-Block-Source_{choice_data[0]}.csv')
+test_block_df.to_csv(f'Test-Block-Source_{choice_data[0]}_{file_name}.csv')
 
 
 # Download the EDF data file from Host
 #timestring = datetime.datetime.now().strftime("%H:%M:%S_%d_%b_%Y")
-tk.receiveDataFile('psychopy.edf', f'Adult_study_{file_name}.edf')
+tk.receiveDataFile('psychopy.edf', f'{file_name}.edf')
 # Close the link to the tracker
 tk.close()
 ## Close the graphics

@@ -17,10 +17,10 @@ RESULTS = "./Results"
 
 # TEST FLAG
 TEST_FLAG = True  
-TEST_TRIALS = 6
+TEST_TRIALS = 1
 
 # PARAMETERS
-AUDIO_DELAY = 0.75
+AUDIO_DELAY = 0.9
 
 # REPETITION PARAMS
 repetition_params = {1: (3,11,16), 2:(6,15,19), 3:(2,10,18), 4:(9,14,20)}
@@ -98,9 +98,11 @@ for condition in test_df['condition'].unique():
 
 space_bar_text = '''PRESS SPACE-BAR TO CONTINUE'''
 
-training_phase_text = visual.TextStim(win, text="Training Phase", height=40, color=(-1, -1, -1), pos=(0,0))
-space_bar = visual.TextStim(win, text=space_bar_text, height=50, color='black', pos=(0,0))
-testing_phase_text = visual.TextStim(win, text="Testing Phase", height=40 , color=(-1, -1, -1), pos=(0,0))
+training_phase_text = visual.TextStim(win, text="Training Phase", height=70, color=(-1, -1, -1), pos=(0,0))
+good_job = visual.TextStim(win, text="Good Job, you found the repetition!", height=70, color=(-1, -1, -1), pos=(0,0))
+bad_job = visual.TextStim(win, text="Please pay attention, you missed the repetition", height=70, color=(-1, -1, -1), pos=(0,0))
+space_bar = visual.TextStim(win, text=space_bar_text, height=70, color='black', pos=(0,0))
+testing_phase_text = visual.TextStim(win, text="Testing Phase", height=70 , color=(-1, -1, -1), pos=(0,0))
 
 #BLOCK DICTIONARY
 BLOCK_DATA_TRAIN = []
@@ -120,9 +122,9 @@ fours = [4]*20
 block_index = ones + twos + threes + fours
 train_trial_df['block_index'] = block_index
 
-for iteration in range(1,5):
+for iteration in range(1,3):
     
-    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.jpg"),pos=(0,0), size=(800,800))
+    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.jpg"),pos=(0,0), size=(1500,1250))
     
     print(f"BLOCK {iteration}")
     
@@ -171,7 +173,7 @@ for iteration in range(1,5):
                 
             
             num_images = len(images)
-            spacing = 150  # Adjust the spacing between images as needed
+            spacing = 300  # Adjust the spacing between images as needed
             total_width = (num_images - 1) * spacing
             start_x = -total_width / 2
             
@@ -181,7 +183,7 @@ for iteration in range(1,5):
             for image_name, i in zip(images, range(num_images)):
                 image_path = os.path.join(IMAGE_PATH, image_name.strip())
                 x = start_x + i * spacing
-                image_stim = visual.ImageStim(win, image=image_path, pos=(x, 0), size=(90, 91))
+                image_stim = visual.ImageStim(win, image=image_path, pos=(x, 0), size=(350 , 351))
                 image_stims.append(image_stim)
             
             
@@ -206,9 +208,15 @@ for iteration in range(1,5):
             if keys[0] == 'down':
                 
                 block_data['repetition_found'] = 1
+                good_job.draw()
+                win.flip()
+                core.wait(1)
                 
             else:
                 block_data['repetition_found'] = 0
+                bad_job.draw()
+                win.flip()
+                core.wait(1)
             
             
             BLOCK_DATA_TRAIN.append(block_data)
@@ -277,11 +285,11 @@ for iteration in range(1,5):
             
             # Create image stimuli for target and foil images
             if target_location == 'left':
-                target_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(90, 91)) for img in target_images]
-                foil_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(90, 91)) for img in foil_images]
+                target_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(350 , 351)) for img in target_images]
+                foil_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(350 , 351)) for img in foil_images]
             else:
-                target_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(90, 91)) for img in target_images]
-                foil_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(90, 91)) for img in foil_images]
+                target_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(350 , 351)) for img in target_images]
+                foil_stimuli = [visual.ImageStim(win, image=os.path.join(IMAGE_PATH,img.strip()), size=(350 , 351)) for img in foil_images]
                 
                 target_stimuli, foil_stimuli = foil_stimuli, target_stimuli
                 
@@ -291,15 +299,15 @@ for iteration in range(1,5):
             y_position = 0  # Adjust as needed
 
             # Set horizontal positions for target stimuli on the left
-            x_offset_target = -400  # Adjust as needed
-            spacing_target = 100  # Adjust the horizontal spacing as needed
+            x_offset_target = -1300  # Adjust as needed
+            spacing_target = 300  # Adjust the horizontal spacing as needed
             for i, target in enumerate(target_stimuli):
                 target_x = x_offset_target + (i * spacing_target)
                 target.pos = (target_x, y_position)
 
             # Set horizontal positions for foil stimuli on the right
-            x_offset_foil = 200  # Adjust as needed
-            spacing_foil = 100  # Adjust the horizontal spacing as needed
+            x_offset_foil = 700  # Adjust as needed
+            spacing_foil = 300  # Adjust the horizontal spacing as needed
             for i, foil in enumerate(foil_stimuli):
                 foil_x = x_offset_foil + (i * spacing_foil)
                 foil.pos = (foil_x, y_position)

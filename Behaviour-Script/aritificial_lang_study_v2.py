@@ -124,7 +124,7 @@ train_trial_df['block_index'] = block_index
 
 for iteration in range(1,3):
     
-    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.jpg"),pos=(0,0), size=(1500,1250))
+    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.png"),pos=(0,0), size=(1500,1250))
     
     print(f"BLOCK {iteration}")
     

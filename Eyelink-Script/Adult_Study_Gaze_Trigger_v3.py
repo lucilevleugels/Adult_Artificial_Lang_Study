@@ -431,7 +431,7 @@ for iteration in range(1,5):
 
     
     # PROGRESS BAR 
-    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.jpg"),pos=(0,0))
+    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.png"),pos=(0,0))
 
     # Put tracker in Offline mode before we start recording
     tk.setOfflineMode()

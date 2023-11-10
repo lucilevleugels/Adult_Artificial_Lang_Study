@@ -17,7 +17,7 @@ RESULTS = "./Results"
 
 # TEST FLAG
 TEST_FLAG = True  
-TEST_TRIALS = 1
+TEST_TRIALS = 2
 
 # PARAMETERS
 AUDIO_DELAY = 0.9
@@ -80,8 +80,8 @@ choice_data = choice_dialog.show()
 win = visual.Window(fullscr=True, units='pix', allowStencil=True, color=(1,1,1))
 
 
-train_df = pd.read_csv(os.path.join(DATA_TRAIN_PATH, "train_v4.csv"))
-test_df = pd.read_csv(os.path.join(DATA_TEST_PATH, "test_v4.csv"))
+train_df = pd.read_csv(os.path.join(DATA_TRAIN_PATH, "train_v5_lv.csv"))
+test_df = pd.read_csv(os.path.join(DATA_TEST_PATH, "test_v5_lv.csv"))
 
 
 
@@ -96,7 +96,7 @@ for condition in test_df['condition'].unique():
 
 
 
-space_bar_text = '''PRESS SPACE-BAR TO CONTINUE'''
+space_bar_text = '''Press space bar to continue'''
 
 training_phase_text = visual.TextStim(win, text="Training Phase", height=70, color=(-1, -1, -1), pos=(0,0))
 good_job = visual.TextStim(win, text="Good Job, you found the repetition!", height=70, color=(-1, -1, -1), pos=(0,0))
@@ -113,7 +113,15 @@ BLOCK_DATA_TEST = []
 train_trial_df = train_dfs[choice_data[0]]
 test_trial_df = test_dfs[choice_data[0]]
 
-# adding block index
+# Thinking about how to process training data block by block
+# max_block_num = train_df['Block'].max()
+# for block_num in range(1, max_block_num + 1):
+#     print(f"BLOCK {block_num}")
+
+#     # Filter the dataframe for the current block
+#     train_block = train_df[train_df['Block'] == block_num]
+
+#adding block index
 ones = [1]*20
 twos = [2]*20
 threes = [3]*20
@@ -124,7 +132,7 @@ train_trial_df['block_index'] = block_index
 
 for iteration in range(1,3):
     
-    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.png"),pos=(0,0), size=(1500,1250))
+    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.png"),pos=(0,0), size=(2200,1250))
     
     print(f"BLOCK {iteration}")
     
@@ -173,7 +181,7 @@ for iteration in range(1,3):
                 
             
             num_images = len(images)
-            spacing = 300  # Adjust the spacing between images as needed
+            spacing = 350  # Adjust the spacing between images as needed
             total_width = (num_images - 1) * spacing
             start_x = -total_width / 2
             
@@ -300,14 +308,14 @@ for iteration in range(1,3):
 
             # Set horizontal positions for target stimuli on the left
             x_offset_target = -1300  # Adjust as needed
-            spacing_target = 300  # Adjust the horizontal spacing as needed
+            spacing_target = 350  # Adjust the horizontal spacing as needed
             for i, target in enumerate(target_stimuli):
                 target_x = x_offset_target + (i * spacing_target)
                 target.pos = (target_x, y_position)
 
             # Set horizontal positions for foil stimuli on the right
             x_offset_foil = 700  # Adjust as needed
-            spacing_foil = 300  # Adjust the horizontal spacing as needed
+            spacing_foil = 350  # Adjust the horizontal spacing as needed
             for i, foil in enumerate(foil_stimuli):
                 foil_x = x_offset_foil + (i * spacing_foil)
                 foil.pos = (foil_x, y_position)

@@ -53,7 +53,7 @@ def training_block(win, training_phase_text, space_bar, train_block, choice_data
     # REPETITION PARAMS
     repetition_params = {1: (3,11,16), 2:(6,15,19), 3:(2,10,18), 4:(9,14,20)}
     
-    good_job = visual.TextStim(win, text="Good Job!, you found the repetition!", height=70, color=(-1, -1, -1), pos=(0,0))
+    good_job = visual.TextStim(win, text="Good Job, you found the repetition!", height=70, color=(-1, -1, -1), pos=(0,0))
     
     temp_train_block_data = []
     
@@ -101,7 +101,7 @@ def training_block(win, training_phase_text, space_bar, train_block, choice_data
                 
             
             num_images = len(images)
-            spacing = 300  # Adjust the spacing between images as needed
+            spacing = 350  # Adjust the spacing between images as needed
             total_width = (num_images - 1) * spacing
             start_x = -total_width / 2
             
@@ -241,14 +241,14 @@ def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data
 
             # Set horizontal positions for target stimuli on the left
             x_offset_target = -1300  # Adjust as needed
-            spacing_target = 300  # Adjust the horizontal spacing as needed
+            spacing_target = 350  # Adjust the horizontal spacing as needed
             for i, target in enumerate(target_stimuli):
                 target_x = x_offset_target + (i * spacing_target)
                 target.pos = (target_x, y_position)
 
             # Set horizontal positions for foil stimuli on the right
             x_offset_foil = 700  # Adjust as needed
-            spacing_foil = 300  # Adjust the horizontal spacing as needed
+            spacing_foil = 350  # Adjust the horizontal spacing as needed
             for i, foil in enumerate(foil_stimuli):
                 foil_x = x_offset_foil + (i * spacing_foil)
                 foil.pos = (foil_x, y_position)
@@ -431,7 +431,7 @@ for iteration in range(1,5):
 
     
     # PROGRESS BAR 
-    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.png"),pos=(0,0))
+    bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.png"),pos=(0,0), size=(2200,1250))
 
     # Put tracker in Offline mode before we start recording
     tk.setOfflineMode()

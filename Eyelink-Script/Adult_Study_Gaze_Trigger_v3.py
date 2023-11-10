@@ -336,8 +336,8 @@ choice_data = choice_dialog.show()
 
 
 # TRIAL CSV's
-train_df = pd.read_csv(os.path.join(DATA_TRAIN_PATH, "train_v4.csv"))
-test_df = pd.read_csv(os.path.join(DATA_TEST_PATH, "test_v4.csv"))
+train_df = pd.read_csv(os.path.join(DATA_TRAIN_PATH, "train_v5_lv.csv"))
+test_df = pd.read_csv(os.path.join(DATA_TEST_PATH, "test_v5_lv.csv"))
 
 
 # df by condition
@@ -421,6 +421,7 @@ for iteration in range(1,5):
     print(f"BLOCK {iteration}")
     
     train_block = train_trial_df[train_trial_df['block_index'] == iteration]
+    test_block = test_trial_df[test_trial_df['Block'] == iteration]
     repetitions = repetition_params[iteration]
    
     for i, repetition in enumerate(repetitions, 0):
@@ -495,7 +496,7 @@ for iteration in range(1,5):
     
     tk.sendMessage(f'!V TRIAL_VAR Test-Block {iteration}')
     tk.sendMessage(f'Test-Block {iteration}')
-    test_block_data  = testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data, iteration)
+    test_block_data  = testing_block(win, testing_phase_text, space_bar, test_block, choice_data, iteration)
     
     bar.draw()
     win.flip()

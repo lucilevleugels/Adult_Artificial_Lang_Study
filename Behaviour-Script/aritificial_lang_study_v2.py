@@ -130,13 +130,14 @@ fours = [4]*20
 block_index = ones + twos + threes + fours
 train_trial_df['block_index'] = block_index
 
-for iteration in range(1,3):
+for iteration in range(1,5):
     
     bar = visual.ImageStim(win, image=os.path.join(PROGESS_IMAGE_PATH, f"progressbar{iteration}.png"),pos=(0,0), size=(2200,1250))
     
     print(f"BLOCK {iteration}")
     
     train_block = train_trial_df[train_trial_df['block_index'] == iteration]
+    test_block = test_trial_df[test_trial_df['Block'] == iteration]
     repetitions = repetition_params[iteration]
    
     for i, repetition in enumerate(repetitions, 0):
@@ -222,9 +223,9 @@ for iteration in range(1,3):
                 
             else:
                 block_data['repetition_found'] = 0
-                bad_job.draw()
-                win.flip()
-                core.wait(1)
+                #bad_job.draw()
+                #win.flip()
+                #core.wait(1)
             
             
             BLOCK_DATA_TRAIN.append(block_data)
@@ -244,16 +245,16 @@ for iteration in range(1,3):
     win.flip()
     control = event.waitKeys(keyList=['space'])
     
-    
+
 
     if control[0] == 'space':
         
         if TEST_FLAG:
-            test_trial_df = test_trial_df.iloc[:TEST_TRIALS,:]
+            test_block = test_block.iloc[:TEST_TRIALS,:]
         else:
-            test_trial_df = test_trial_df
+            test_block = test_block
         
-        for i,row in enumerate(test_trial_df.iterrows(),1):
+        for i,row in enumerate(test_block.iterrows(),1):
             block_data = {}
             
             trial_data = row[1]

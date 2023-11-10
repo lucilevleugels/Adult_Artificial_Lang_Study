@@ -17,7 +17,7 @@ RESULTS = "./Results"
 
 # TEST FLAG
 TEST_FLAG = True  
-TEST_TRIALS = 2
+TEST_TRIALS = 6
 
 # PARAMETERS
 AUDIO_DELAY = 0.9
@@ -159,9 +159,14 @@ for iteration in range(1,5):
         else:
             train_block = train_block
         
+        # to identify the repetition
+        hashmap={}
         for i, row in enumerate(train_block.iterrows(),1):
             
             trial_data = row[1]
+            
+            # increment for repetition
+            hashmap[trial_data['trial']] = hashmap.get(trial_data['trial'],0)+1
             
             block_data = {}
             block_data['block'] = iteration
@@ -214,25 +219,32 @@ for iteration in range(1,5):
             win.flip()
             keys = event.waitKeys(keyList=['space', 'down'])
 
-            if keys[0] == 'down':
+            if keys[0] == 'down' and hashmap[trial_data['trial']] == 2:
                 
                 block_data['repetition_found'] = 1
                 good_job.draw()
                 win.flip()
-                core.wait(1)
+                core.wait(2)
                 
-            else:
+                space_bar.draw()
+                win.flip()
+                keys = event.waitKeys(keyList=['space'])
+                
+            elif hashmap[trial_data['trial']] == 2:
                 block_data['repetition_found'] = 0
-                #bad_job.draw()
-                #win.flip()
-                #core.wait(1)
+                bad_job.draw()
+                win.flip()
+                core.wait(2)
+                
+                space_bar.draw()
+                win.flip()
+                keys = event.waitKeys(keyList=['space'])
             
             
             BLOCK_DATA_TRAIN.append(block_data)
             
 
-    
-    #print(BLOCK_DATA_TRAIN)
+
         
       
     #TESTING PHASE

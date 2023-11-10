@@ -48,12 +48,16 @@ def create_repetitions(repetition, df):
         
     return pd.concat([before_r, row_copy, after_r],axis=0)
 
-def training_block(win, training_phase_text, space_bar, train_block, choice_data, iteration):
+def training_block(tk, win, training_phase_text, space_bar, train_block, choice_data, iteration):
+    
+    tk.sendMessage(f'!V TRIAL_VAR Train-Block {iteration}')
+    tk.sendMessage(f'Train-Block {iteration}')
     
     # REPETITION PARAMS
     repetition_params = {1: (3,11,16), 2:(6,15,19), 3:(2,10,18), 4:(9,14,20)}
     
     good_job = visual.TextStim(win, text="Good Job, you found the repetition!", height=70, color=(-1, -1, -1), pos=(0,0))
+    bad_job = visual.TextStim(win, text="Please Play Attention, you missed the repetition.", height=70, color=(-1, -1, -1), pos=(0,0))
     
     temp_train_block_data = []
     
@@ -76,10 +80,18 @@ def training_block(win, training_phase_text, space_bar, train_block, choice_data
             train_block = train_block
         
         
-        
+        # to identify the repetition
+        hashmap={}
         for i, row in enumerate(train_block.iterrows(),1):
             
+            
+            
+            tk.sendMessage(f'TRIALID {i}')
+            
             trial_data = row[1]
+            
+            # increment for repetition
+            hashmap[trial_data['trial']] = hashmap.get(trial_data['trial'],0)+1
             
             block_data = {}
             block_data['block'] = iteration 
@@ -120,14 +132,11 @@ def training_block(win, training_phase_text, space_bar, train_block, choice_data
             for image_stim in image_stims:
                 image_stim.draw()
             win.flip()
-            tk.sendMessage(f'Image Stimulus Presentation End')
+            
                 
             
             tk.sendMessage(f'!V TRIAL_VAR Audio-Train {audio_items}')
             
-            # for testing 
-            for audio in audio_items:
-                tk.sendMessage(f'Sound {audio} On_set')
                 
             
             for sound_stim,audio in zip(sound_stims,audio_items):
@@ -143,22 +152,29 @@ def training_block(win, training_phase_text, space_bar, train_block, choice_data
             win.flip()
             keys = event.waitKeys(keyList=['space', 'down'])
            
-            if keys[0] == 'down':
+            if keys[0] == 'down' and hashmap[trial_data['trial']] == 2:
                 
                 block_data['repetition_found'] = 1
                 tk.sendMessage(f'!V TRIAL_VAR Repetition-Found 1')
-                good_job = visual.TextStim(win, text="Good Job!, you found the repetition!", height=70, color=(-1, -1, -1), pos=(0,0))
+               
                 good_job.draw()
-                win.flip()
-                core.wait(1)
                 
-            else:
+                win.flip()
+                core.wait(2)
+                
+            else hashmap[trial_data['trial']] == 2:
+                bad_job.draw()
+                win.flip()
+                core.wait(2)
                 tk.sendMessage(f'!V TRIAL_VAR Repetition-Found 0')
                 block_data['repetition_found'] = 0
             
             
+            tk.sendMessage(f'Image Stimulus Presentation End')
+            
             temp_train_block_data.append(block_data)
             
+            tk.sendMessage('TRIAL_RESULT 0')
             
     
     
@@ -167,7 +183,10 @@ def training_block(win, training_phase_text, space_bar, train_block, choice_data
     
 
             
-def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data, iteration ):
+def testing_block(tk, win, testing_phase_text, space_bar, test_trial_df, choice_data, iteration ):
+    
+    tk.sendMessage(f'!V TRIAL_VAR Test-Block {iteration}')
+    tk.sendMessage(f'Test-Block {iteration}')
     
     temp_test_block_data = []
     
@@ -189,6 +208,9 @@ def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data
             test_trial_df = test_trial_df
         
         for i,row in enumerate(test_trial_df.iterrows(),1):
+            
+            tk.sendMessage(f'TRIALID {i}')
+            
             block_data = {}
             
             
@@ -267,9 +289,7 @@ def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data
             win.flip()
             
             tk.sendMessage(f'!V TRIAL_VAR Audio-Train {audio_items}')
-            # for testing 
-            for audio in audio_items:
-                tk.sendMessage(f'Sound {audio} On_set')
+           
             for sound_stim, audio in zip(sound_stims, audio_items):
                 tk.sendMessage(f'Sound {audio} On_set')
                 sound_stim.play()
@@ -299,6 +319,8 @@ def testing_block(win, testing_phase_text, space_bar, test_trial_df, choice_data
             control = event.waitKeys(keyList=['space'])
                 
             temp_test_block_data.append(block_data)
+            
+            tk.sendMessage('TRIAL_RESULT 0')
             
     return temp_test_block_data
 
@@ -487,16 +509,10 @@ for iteration in range(1,5):
    
    
 
-    tk.sendMessage(f'!V TRIAL_VAR Train-Block {iteration}')
-    tk.sendMessage(f'Train-Block {iteration}')
-    train_block_data = training_block(win, training_phase_text, space_bar, train_block, choice_data, iteration)
+   
+    train_block_data = training_block(tk, win, training_phase_text, space_bar, train_block, choice_data, iteration)
     # can introduce some kind of delay here in between
-
-    
-    
-    tk.sendMessage(f'!V TRIAL_VAR Test-Block {iteration}')
-    tk.sendMessage(f'Test-Block {iteration}')
-    test_block_data  = testing_block(win, testing_phase_text, space_bar, test_block, choice_data, iteration)
+    test_block_data  = testing_block(tk, win, testing_phase_text, space_bar, test_block, choice_data, iteration)
     
     bar.draw()
     win.flip()

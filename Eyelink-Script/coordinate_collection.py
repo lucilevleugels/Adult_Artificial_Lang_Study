@@ -27,7 +27,7 @@ RESULTS = "./Results"
 AUDIO_DELAY = 0.9
 
 # TEST FLAG
-TEST_FLAG = False  
+TEST_FLAG = True  
 TEST_TRIALS = 3
 
 # BLOCKS
@@ -135,6 +135,10 @@ def training_block(tk, win, training_phase_text, space_bar, train_block, choice_
                 image_stim.draw()
             win.flip()
             
+            with open("coords.txt", "a+") as f:
+                for image_stim in image_stims:
+                    f.write(str(image_stim.pos)+"\n")
+                    f.write("*"*25)
             
                 
             
@@ -335,7 +339,7 @@ def testing_block(tk, win, testing_phase_text, space_bar, test_trial_df, choice_
             for foil in foil_stimuli:
                 foil.draw()
                 
-            
+            tk.sendMessage(f'Image Stimulus Presentation -- End')
             
             # Update the window to show the stimuli
             win.flip()
@@ -352,7 +356,7 @@ def testing_block(tk, win, testing_phase_text, space_bar, test_trial_df, choice_
             keys = event.waitKeys(keyList=['left', 'right', 'escape'])
             elapsed_time = core.getTime() - start_time
             block_data['Response Time'] = elapsed_time
-            tk.sendMessage(f'Image Stimulus Presentation -- End')
+
             
             tk.sendMessage(f'!V TRIAL_VAR Response-Time {elapsed_time}')
             

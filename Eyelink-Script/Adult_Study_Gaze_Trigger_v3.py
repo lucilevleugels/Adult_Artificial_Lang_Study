@@ -28,7 +28,10 @@ AUDIO_DELAY = 0.9
 
 # TEST FLAG
 TEST_FLAG = False  
-TEST_TRIALS = 1
+TEST_TRIALS = 3
+
+# BLOCKS
+BLOCKS = range(1,5)
 
 # IMAGE PARAMS
 IMAGE_DIMS = (350 , 351)
@@ -50,8 +53,7 @@ def create_repetitions(repetition, df):
 
 def training_block(tk, win, training_phase_text, space_bar, train_block, choice_data, iteration):
     
-    tk.sendMessage(f'!V TRIAL_VAR Train-Block {iteration}')
-    tk.sendMessage(f'Train-Block {iteration}')
+    
     
     # REPETITION PARAMS
     repetition_params = {1: (3,11,16), 2:(6,15,19), 3:(2,10,18), 4:(9,14,20)}
@@ -133,6 +135,7 @@ def training_block(tk, win, training_phase_text, space_bar, train_block, choice_
                 image_stim.draw()
             win.flip()
             
+            
                 
             
             tk.sendMessage(f'!V TRIAL_VAR Audio-Train {audio_items}')
@@ -150,7 +153,7 @@ def training_block(tk, win, training_phase_text, space_bar, train_block, choice_
             # space bar screen
             space_bar.draw()
             win.flip()
-            keys = event.waitKeys(keyList=['space', 'down'])
+            keys = event.waitKeys(keyList=['space', 'down','escape'])
            
             if keys[0] == 'down' and hashmap[trial_data['trial']] == 2:
                 
@@ -161,20 +164,70 @@ def training_block(tk, win, training_phase_text, space_bar, train_block, choice_
                 
                 win.flip()
                 core.wait(2)
-                
-            else hashmap[trial_data['trial']] == 2:
+                space_bar.draw()
+                win.flip()
+                keys = event.waitKeys(keyList=['space', 'escape'])
+                if keys[0] == 'escape':
+                    
+                    # Stop recording
+                    tk.stopRecording()
+
+                    # Close the EDF data file on the Host
+                    tk.closeDataFile()
+                    
+                    tk.receiveDataFile('psychopy.edf', f'partial.edf')
+                    # Close the link to the tracker
+                    tk.close()
+                    ## Close the graphics
+                    win.close()
+                    core.quit()
+            
+            elif hashmap[trial_data['trial']] == 2:
                 bad_job.draw()
                 win.flip()
                 core.wait(2)
                 tk.sendMessage(f'!V TRIAL_VAR Repetition-Found 0')
                 block_data['repetition_found'] = 0
-            
+                
+                space_bar.draw()
+                win.flip()
+                keys = event.waitKeys(keyList=['space', 'escape'])
+                
+                if keys[0] == "escape":
+                    # Stop recording
+                    tk.stopRecording()
+
+                    # Close the EDF data file on the Host
+                    tk.closeDataFile()
+                    
+                    tk.receiveDataFile('psychopy.edf', f'partial.edf')
+                    # Close the link to the tracker
+                    tk.close()
+                    ## Close the graphics
+                    win.close()
+                    core.quit()
+               
+            elif keys[0] == 'escape':
+                    
+                    # Stop recording
+                    tk.stopRecording()
+
+                    # Close the EDF data file on the Host
+                    tk.closeDataFile()
+                    
+                    tk.receiveDataFile('psychopy.edf', f'partial.edf')
+                    # Close the link to the tracker
+                    tk.close()
+                    ## Close the graphics
+                    win.close()
+                    core.quit()
+               
             
             tk.sendMessage(f'Image Stimulus Presentation End')
             
             temp_train_block_data.append(block_data)
             
-            tk.sendMessage('TRIAL_RESULT 0')
+            #tk.sendMessage('TRIAL_RESULT 0')
             
     
     
@@ -185,8 +238,7 @@ def training_block(tk, win, training_phase_text, space_bar, train_block, choice_
             
 def testing_block(tk, win, testing_phase_text, space_bar, test_trial_df, choice_data, iteration ):
     
-    tk.sendMessage(f'!V TRIAL_VAR Test-Block {iteration}')
-    tk.sendMessage(f'Test-Block {iteration}')
+    
     
     temp_test_block_data = []
     
@@ -283,24 +335,24 @@ def testing_block(tk, win, testing_phase_text, space_bar, test_trial_df, choice_
             for foil in foil_stimuli:
                 foil.draw()
                 
-            tk.sendMessage(f'Image Stimulus Presentation -- End')
+            
             
             # Update the window to show the stimuli
             win.flip()
-            
+            tk.sendMessage(f'Sound stimulus presentation Start')
             tk.sendMessage(f'!V TRIAL_VAR Audio-Train {audio_items}')
            
             for sound_stim, audio in zip(sound_stims, audio_items):
                 tk.sendMessage(f'Sound {audio} On_set')
                 sound_stim.play()
                 core.wait(AUDIO_DELAY)
-            tk.sendMessage(f'Sound stimulus presentation  -- End')
+            tk.sendMessage(f'Sound stimulus presentation End')
             
             start_time = core.getTime()
             keys = event.waitKeys(keyList=['left', 'right', 'escape'])
             elapsed_time = core.getTime() - start_time
             block_data['Response Time'] = elapsed_time
-
+            tk.sendMessage(f'Image Stimulus Presentation -- End')
             
             tk.sendMessage(f'!V TRIAL_VAR Response-Time {elapsed_time}')
             
@@ -320,7 +372,7 @@ def testing_block(tk, win, testing_phase_text, space_bar, test_trial_df, choice_
                 
             temp_test_block_data.append(block_data)
             
-            tk.sendMessage('TRIAL_RESULT 0')
+            #tk.sendMessage('TRIAL_RESULT 0')
             
     return temp_test_block_data
 
@@ -385,8 +437,10 @@ event_flags = 'LEFT,RIGHT,FIXATION,FIXUPDATE,SACCADE,BLINK,BUTTON,INPUT'
 tk.sendCommand(f'link_event_filter = {event_flags}')
 
 # Open a PsyhocPy window
-win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix', color='white')
-#win = visual.Window(fullscr=True, units='pix', color='white')
+#win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix', color='white')
+#win = visual.Window((SCN_W, SCN_H), fullscr=False, units='pix', color='white')
+win = visual.Window(fullscr=True, units='pix', color='white')
+(SCN_W, SCN_H) = win.size
 #win = visual.Window((3900,2050), fullscr=False, units='pix', color='white')
 
 #win = visual.Window(fullscr=True, units='pix', color='white')
@@ -437,7 +491,7 @@ repetition_params = {1: (3,11,16), 2:(6,15,19), 3:(2,10,18), 4:(9,14,20)}
 
 
 # in each trial, first show a fixation dot, wait for the participant # to gaze at the fixation dot, then present an image for 2 secs
-for iteration in range(1,5):
+for iteration in BLOCKS:
     
     
     print(f"BLOCK {iteration}")
@@ -509,10 +563,18 @@ for iteration in range(1,5):
    
    
 
-   
+    tk.sendMessage(f'!V TRIAL_VAR Train-Block {iteration}')
+    tk.sendMessage(f'Train-Block {iteration}')
     train_block_data = training_block(tk, win, training_phase_text, space_bar, train_block, choice_data, iteration)
     # can introduce some kind of delay here in between
+    tk.sendMessage(f'Train-Block {iteration} End')
+    
+    tk.sendMessage(f'!V TRIAL_VAR Test-Block {iteration}')
+    tk.sendMessage(f'Test-Block {iteration}')
     test_block_data  = testing_block(tk, win, testing_phase_text, space_bar, test_block, choice_data, iteration)
+    
+    
+    tk.sendMessage(f'Test-Block {iteration} End')
     
     bar.draw()
     win.flip()

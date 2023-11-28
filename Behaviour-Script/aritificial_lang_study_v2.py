@@ -17,7 +17,7 @@ RESULTS = "./Results"
 
 # TEST FLAG
 TEST_FLAG = True  
-TEST_TRIALS = 6
+TEST_TRIALS = 4
 
 # PARAMETERS
 AUDIO_DELAY = 0.9
@@ -78,6 +78,8 @@ choice_data = choice_dialog.show()
 #SCN_W, SCN_H = (1280, 800)
 # Open a PsyhocPy window with the "allowStencil" option 
 win = visual.Window(fullscr=True, units='pix', allowStencil=True, color=(1,1,1))
+
+print(win.size)
 
 
 train_df = pd.read_csv(os.path.join(DATA_TRAIN_PATH, "train_v5_lv.csv"))

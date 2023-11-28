@@ -28,7 +28,7 @@ AUDIO_DELAY = 0.9
 
 # TEST FLAG
 TEST_FLAG = False  
-TEST_TRIALS = 3
+TEST_TRIALS = 6
 
 # BLOCKS
 BLOCKS = range(1,5)
@@ -89,6 +89,8 @@ def training_block(tk, win, training_phase_text, space_bar, train_block, choice_
             
             
             tk.sendMessage(f'TRIALID {i}')
+            tk.sendMessage(f"TRAINING BLOCK {iteration} ")
+            tk.sendMessage(f'!V TRIAL_VAR Train-Block {iteration}')
             
             trial_data = row[1]
             
@@ -228,6 +230,7 @@ def training_block(tk, win, training_phase_text, space_bar, train_block, choice_
             temp_train_block_data.append(block_data)
             
             #tk.sendMessage('TRIAL_RESULT 0')
+            tk.sendMessage(f"TRAINING BLOCK {iteration} END ")
             
     
     
@@ -262,6 +265,7 @@ def testing_block(tk, win, testing_phase_text, space_bar, test_trial_df, choice_
         for i,row in enumerate(test_trial_df.iterrows(),1):
             
             tk.sendMessage(f'TRIALID {i}')
+            tk.sendMessage(f'!V TRIAL_VAR Test-Block {iteration}')
             
             block_data = {}
             
@@ -563,18 +567,20 @@ for iteration in BLOCKS:
    
    
 
-    tk.sendMessage(f'!V TRIAL_VAR Train-Block {iteration}')
-    tk.sendMessage(f'Train-Block {iteration}')
+   
+    #tk.sendMessage(f'Train-Block {iteration}')
+    tk.sendMessage(f'!V TRIAL_VAR Train-Block {iteration}_GazeTrigger')
     train_block_data = training_block(tk, win, training_phase_text, space_bar, train_block, choice_data, iteration)
     # can introduce some kind of delay here in between
-    tk.sendMessage(f'Train-Block {iteration} End')
+    #tk.sendMessage(f'Train-Block {iteration} End')
     
-    tk.sendMessage(f'!V TRIAL_VAR Test-Block {iteration}')
-    tk.sendMessage(f'Test-Block {iteration}')
+   
+    #tk.sendMessage(f'Test-Block {iteration}')
+    tk.sendMessage(f'!V TRIAL_VAR Test-Block {iteration}_GazeTrigger')
     test_block_data  = testing_block(tk, win, testing_phase_text, space_bar, test_block, choice_data, iteration)
     
     
-    tk.sendMessage(f'Test-Block {iteration} End')
+    #tk.sendMessage(f'Test-Block {iteration} End')
     
     bar.draw()
     win.flip()

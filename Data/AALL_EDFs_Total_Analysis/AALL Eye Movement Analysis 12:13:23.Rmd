@@ -1,0 +1,142 @@
+---
+title: "AALL Eye Movement Analysis 12/13/23"
+output: html_document
+date: "2023-12-13"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library("here")
+library("tidyverse")
+library("afex")
+library("ggplot2")
+library("car")
+library(dplyr)
+library(readr)
+```
+## Read in data
+```{r}
+
+# Read in data
+total_edfs_data <- read_csv("Output/fix_report_edfs_total_12_13.csv", show_col_types = FALSE)
+
+# Filter the data
+training_only_edfs <- total_edfs_data %>%
+  filter(`Test-Block` == "UNDEFINEDnull") %>%
+  filter(`Train-Block` %in% c("1", "2", "3", "4", "UNDEFINEDnull"))%>%
+  filter(!(Participant_ID %in% c("5","10", "18", "22", "31", "33")))
+
+# Calculate Total Duration for each Participant_ID and Trial
+total_duration <- training_only_edfs %>%
+  group_by(Participant_ID, Trial) %>%
+  summarise(Total_Duration = sum(CURRENT_FIX_DURATION, na.rm = TRUE))
+
+# Join the total duration back to the original data using both Participant_ID and Trial as keys
+training_only_edfs <- training_only_edfs %>%
+  left_join(total_duration, by = c("Participant_ID", "Trial"))
+
+# Calculate the proportion of CURRENT_FIX_DURATION to Total_Duration
+training_only_edfs <- training_only_edfs %>%
+  mutate(Proportion = CURRENT_FIX_DURATION / Total_Duration)
+
+
+# Read the condition key file
+conditionKey <- read_csv("Output/ParticipantConditionKey.csv")
+
+# Join the condition information with the training_only_edfs dataframe
+training_only_edfs <- training_only_edfs %>%
+  left_join(conditionKey, by = "Participant_ID")
+
+# View the first few rows of the modified dataframe
+#print(training_only_edfs %>% select(Participant_ID, Condition, Trial, `Train-Block`, CURRENT_FIX_INDEX, CURRENT_FIX_DURATION, Total_Duration, Proportion, CURRENT_FIX_INTEREST_AREA_LABEL))
+
+```
+
+```{r}
+# Calculate total fixation duration for each interest area per participant
+interest_area_duration_participant <- training_only_edfs %>%
+  group_by(Participant_ID, CURRENT_FIX_INTEREST_AREA_LABEL) %>%
+  summarise(Total_Fixation_Duration = sum(CURRENT_FIX_DURATION, na.rm = TRUE)) %>%
+  ungroup()
+
+# Join this back to the main dataframe to get the total duration for each participant
+participant_total_duration <- training_only_edfs %>%
+  group_by(Participant_ID) %>%
+  summarise(Total_Duration = sum(CURRENT_FIX_DURATION, na.rm = TRUE)) %>%
+  ungroup()
+
+training_only_edfs_with_interest_participant <- participant_total_duration %>%
+  inner_join(interest_area_duration_participant, by = "Participant_ID")
+
+# Calculate the proportion of each interest area per participant
+training_only_edfs_with_interest_participant <- training_only_edfs_with_interest_participant %>%
+  mutate(Interest_Area_Proportion = Total_Fixation_Duration / Total_Duration)
+
+# Plotting the average fixation proportion within each interest area for each participant
+ggplot(training_only_edfs_with_interest_participant, aes(x = CURRENT_FIX_INTEREST_AREA_LABEL, y = Interest_Area_Proportion, fill = CURRENT_FIX_INTEREST_AREA_LABEL)) +
+  geom_bar(stat = "summary", fun = "mean") +
+  facet_wrap(~ Participant_ID) +
+  labs(title = "Average Fixation Proportion per Interest Area for Each Participant", x = "Interest Area", y = "Average Proportion") +
+  scale_fill_brewer(palette = "Set1") +  # Optional: Use a color palette for better color distinction
+  theme_minimal()+
+  theme(axis.text.x = element_blank())  # Remove x-axis labels
+
+print(training_only_edfs_with_interest_participant)
+
+```
+
+```{r}
+# Calculate total fixation duration for each interest area per condition
+interest_area_duration_condition <- training_only_edfs %>%
+  group_by(Condition, CURRENT_FIX_INTEREST_AREA_LABEL) %>%
+  summarise(Total_Fixation_Duration = sum(CURRENT_FIX_DURATION, na.rm = TRUE)) %>%
+  ungroup()
+
+# Join this back to the main dataframe to get the total duration for each condition
+condition_total_duration <- training_only_edfs %>%
+  group_by(Condition) %>%
+  summarise(Total_Duration = sum(CURRENT_FIX_DURATION, na.rm = TRUE)) %>%
+  ungroup()
+
+training_only_edfs_with_interest_condition <- condition_total_duration %>%
+  inner_join(interest_area_duration_condition, by = "Condition")
+
+# Calculate the proportion of each interest area per condition
+training_only_edfs_with_interest_condition <- training_only_edfs_with_interest_condition %>%
+  mutate(Interest_Area_Proportion = Total_Fixation_Duration / Total_Duration)%>%
+
+print(training_only_edfs_with_interest_condition)
+
+# Plotting the average fixation proportion within each interest area for each condition
+ggplot(training_only_edfs_with_interest_condition, aes(x = CURRENT_FIX_INTEREST_AREA_LABEL, y = Interest_Area_Proportion, fill = CURRENT_FIX_INTEREST_AREA_LABEL)) +
+  geom_bar(stat = "summary", fun = "mean") +
+  facet_wrap(~ Condition) +
+  labs(title = "Average Fixation Proportion per Interest Area for Each Condition", x = "Interest Area", y = "Average Proportion") +
+  scale_fill_brewer(palette = "Set1") +  # Use a color palette for better color distinction
+  theme_minimal()+
+  theme(axis.text.x = element_blank())  # Remove x-axis labels
+
+
+```
+
+
+
+```{r}
+# Calculate the proportion of CURRENT_FIX_INTEREST_AREA_LABEL data when participants are not looking (".")
+missing_data_proportion <- training_only_edfs %>%
+  mutate(Is_Missing = is.na(CURRENT_FIX_INTEREST_AREA_LABEL) | CURRENT_FIX_INTEREST_AREA_LABEL == ".") %>%
+  group_by(Participant_ID) %>%
+  summarise(Missing_Data_Proportion = mean(Is_Missing, na.rm = TRUE)) %>%
+  ungroup()
+
+# Identify participants with more than 50% not looking data
+participants_with_missing_data <- missing_data_proportion %>%
+  filter(Missing_Data_Proportion > 0.5)
+
+# Display participants with more than 50% not looking data
+print(participants_with_missing_data)
+
+```

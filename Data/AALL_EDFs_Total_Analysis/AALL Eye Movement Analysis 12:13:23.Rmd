@@ -23,6 +23,8 @@ library(readr)
 # Read in data
 total_edfs_data <- read_csv("Output/fix_report_edfs_total_12_13.csv", show_col_types = FALSE)
 
+exclusion_ids = c("018", "022", "042", "033", "026", "006", "008", "031", "036", "044", "045", "048")
+
 # Filter the data
 training_only_edfs <- total_edfs_data %>%
   filter(`Test-Block` == "UNDEFINEDnull") %>%
